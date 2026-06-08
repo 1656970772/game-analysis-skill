@@ -1,0 +1,34 @@
+{
+  "name": "game-art-study-gallery-viewer",
+  "version": "1.0.0",
+  "description": "Local-only gallery viewer for studying exported art resources.",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "self-test": "electron . --self-test",
+    "dist": "electron-builder --win portable --x64"
+  },
+  "devDependencies": {
+    "electron": "^39.2.6",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "local.gameartstudy.gallery",
+    "productName": "GameArtStudyGallery",
+    "artifactName": "GameArtStudyGallery.${ext}",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ]
+    }
+  }
+}

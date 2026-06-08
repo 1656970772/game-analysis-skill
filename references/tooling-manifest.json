@@ -1,0 +1,120 @@
+{
+  "distribution": "GameAnalysis lightweight repository excludes tools/ and does not auto-download third-party binaries.",
+  "auto_download": false,
+  "generated_from_local_workspace": "GameAnalysis local tool registry",
+  "tools": [
+    {
+      "name": "AssetRipper",
+      "version": "1.3.14",
+      "local_path": "tools/AssetRipper_1.3.14/AssetRipper.GUI.Free.exe",
+      "archive_path": "tools/AssetRipper_win_x64.zip",
+      "source": "https://github.com/AssetRipper/AssetRipper/releases/tag/1.3.14",
+      "purpose": "Unity project reconstruction and full local export from user-authorized game folders."
+    },
+    {
+      "name": "UABEA",
+      "version": "v8",
+      "local_path": "tools/UABEA_v8/UABEAvalonia.exe",
+      "archive_path": "tools/uabea-windows.zip",
+      "source": "https://github.com/nesrak1/UABEA/releases/tag/v8",
+      "purpose": "Fallback Unity asset bundle inspection when AssetRipper or UnityPy cannot read a specific container."
+    },
+    {
+      "name": "UnityPy",
+      "version": "1.25.0",
+      "local_path": "tools/python-env/Scripts/python.exe",
+      "source": "https://pypi.org/project/UnityPy/",
+      "purpose": "Scripted extraction of readable Unity Sprite, Texture2D, TextAsset, AudioClip, and animation-frame data."
+    },
+    {
+      "name": "repak",
+      "version": "0.2.3",
+      "local_path": "tools/repak_0.2.3/repak.exe",
+      "archive_path": "tools/repak_cli-x86_64-pc-windows-msvc-v0.2.3.zip",
+      "source": "https://github.com/trumank/repak",
+      "purpose": "Read-only Unreal .pak info/list/get workflows for user-authorized packaged games before any optional asset export."
+    },
+    {
+      "name": "UEViewer / UModel",
+      "version": "build 1590",
+      "local_path": "tools/UEViewer_umodel/umodel_64.exe",
+      "archive_path": "tools/umodel_win32_gildor_down47.zip",
+      "source": "https://www.gildor.org/en/projects/umodel",
+      "purpose": "Optional Unreal package viewer/exporter for small verified samples. Large commercial packages may require engine version parameters or time out; record failures."
+    },
+    {
+      "name": "UndertaleModCli",
+      "version": "0.9.0.0",
+      "local_path": "tools/UTMT_CLI_v0.9.0.0-Windows/UndertaleModCli.exe",
+      "archive_path": "tools/UTMT_CLI_v0.9.0.0-Windows.zip",
+      "source": "https://github.com/UnderminersTeam/UndertaleModTool/releases/tag/0.9.0.0",
+      "purpose": "Automated local reading and exporter-script execution for user-authorized GameMaker data.win files."
+    },
+    {
+      "name": "UndertaleModTool",
+      "version": "0.9.0.0",
+      "local_path": "tools/UndertaleModTool_v0.9.0.0-Windows/UndertaleModTool.exe",
+      "archive_path": "tools/UndertaleModTool_v0.9.0.0-Windows.zip",
+      "source": "https://github.com/UnderminersTeam/UndertaleModTool/releases/tag/0.9.0.0",
+      "purpose": "GUI cross-checker and source of bundled GameMaker Resource Exporters scripts such as ExportAllSprites, ExportAllTextures, ExportAllSounds, and ExportAllStringsJSON."
+    },
+    {
+      "name": "ARM ASTC Encoder / astcenc",
+      "version": "5.4.0",
+      "local_path": "tools/astcenc_5.4.0_windows_x64/bin/astcenc-sse4.1.exe",
+      "archive_path": "tools/astcenc-5.4.0-windows-x64.zip",
+      "source": "https://github.com/ARM-software/astc-encoder/releases",
+      "purpose": "Decode Cocos Creator and other mobile ASTC textures to local PNG previews for user-authorized study outputs. This local copy is the official windows-x64 release for x64 Windows; still record URL, version, license, SHA256, and -version/-help output in each current study-root."
+    },
+    {
+      "name": "Electron gallery viewer template",
+      "version": "template",
+      "local_path": "assets/electron-gallery-viewer",
+      "source": "Local template generated from the verified Karma Exorcist gallery viewer workflow.",
+      "purpose": "Build a local Windows portable EXE that opens the generated HTML gallery and can reveal assets in Explorer."
+    },
+    {
+      "name": "ILSpy / ilspycmd",
+      "version": "10.0.1.8346",
+      "local_path": "tools/ilspycmd_10.0.1.8346/ilspycmd.exe",
+      "source": "https://github.com/icsharpcode/ILSpy",
+      "purpose": "Check whether a Unity Assembly-CSharp.dll contains real managed IL method bodies or only dummy/stub signatures."
+    },
+    {
+      "name": "Il2CppDumper",
+      "version": "6.7.46",
+      "local_path": "tools/Il2CppDumper_v6.7.46/Il2CppDumper.exe",
+      "source": "https://github.com/Perfare/Il2CppDumper",
+      "purpose": "Generate dump.cs, script.json, il2cpp.h, stringliteral.json, and DummyDll from GameAssembly.dll plus global-metadata.dat."
+    },
+    {
+      "name": "Cpp2IL",
+      "version": "2022.0.7",
+      "local_path": "tools/Cpp2IL_2022.0.7/Cpp2IL.exe",
+      "source": "https://github.com/SamboyCoding/Cpp2IL",
+      "purpose": "Optional IL2CPP analysis fallback. It may fail on newer metadata versions; record the failure instead of replacing Il2CppDumper."
+    },
+    {
+      "name": "Ghidra",
+      "version": "12.0.4",
+      "local_path": "tools/Ghidra_12.0.4_PUBLIC/support/analyzeHeadless.bat",
+      "source": "https://github.com/NationalSecurityAgency/ghidra",
+      "purpose": "Analyze GameAssembly.dll native code and apply Il2CppDumper mappings to inspect behavior relevant to art, animation, UI, VFX, camera, and audio."
+    },
+    {
+      "name": "JDK",
+      "version": "Eclipse Temurin 21.0.11",
+      "local_path": "tools/JDK21/bin/java.exe",
+      "source": "https://adoptium.net/temurin/releases/",
+      "purpose": "Portable Java runtime used by bundled Ghidra without changing the system Java installation."
+    },
+    {
+      "name": "IDA / IDA Free",
+      "version": "user-provided license",
+      "local_path": "user-provided install",
+      "source": "https://hex-rays.com/ida-free",
+      "purpose": "Optional manual cross-check for native code. IDA Free is not the default automated route because licensing and automation capabilities are limited."
+    }
+  ],
+  "boundary": "These entries describe expected local paths and trusted sources for user-authorized learning workflows. The public repository may omit tools/; missing tools must be restored only with user permission, license checks, source URL, version, hash, and help/version output. Do not use them to distribute third-party original assets."
+}
