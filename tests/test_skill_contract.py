@@ -110,6 +110,8 @@ def test_skill_declares_dynamic_subagent_dispatch_contract():
 
     required_skill_terms = [
         "动态子 agent 调度",
+        "默认使用动态子 agent 调度",
+        "除非用户明确要求不使用多 agent",
         "任务图",
         "互不重叠的写入范围",
         "DONE_WITH_CONCERNS",
@@ -121,6 +123,8 @@ def test_skill_declares_dynamic_subagent_dispatch_contract():
         assert term in skill
 
     required_prompt_terms = [
+        "默认使用动态子 agent 调度",
+        "除非用户明确要求不使用多 agent",
         "角色选择规则",
         "依赖顺序",
         "任务输出契约",
@@ -129,6 +133,8 @@ def test_skill_declares_dynamic_subagent_dispatch_contract():
     ]
     for term in required_prompt_terms:
         assert term in prompts
+
+    assert "任务可拆成互不重叠的阶段或产物时" not in skill
 
 
 def test_dynamic_subagent_references_are_stage_safe():
