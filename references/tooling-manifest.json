@@ -1,6 +1,6 @@
 {
-  "distribution": "GameAnalysis lightweight repository excludes tools/ and does not auto-download third-party binaries.",
-  "auto_download": false,
+  "distribution": "GameAnalysis lightweight repository may exclude tools/, but agents should automatically restore trusted third-party tools when needed and persist them under tools/.",
+  "auto_download": true,
   "generated_from_local_workspace": "GameAnalysis local tool registry",
   "tools": [
     {
