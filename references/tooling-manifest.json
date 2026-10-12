@@ -20,6 +20,33 @@
       "purpose": "Fallback Unity asset bundle inspection when AssetRipper or UnityPy cannot read a specific container."
     },
     {
+      "name": "GDRETools",
+      "version": "2.6.0",
+      "local_path": "tools/GDRETools_2.6.0/gdre_tools.exe",
+      "archive_path": "tools/GDRE_tools-v2.6.0-windows.zip",
+      "source": "https://github.com/GDRETools/gdsdecomp/releases/download/v2.6.0/GDRE_tools-v2.6.0-windows.zip",
+      "release": "https://github.com/GDRETools/gdsdecomp/releases/tag/v2.6.0",
+      "license": "MIT",
+      "archive_sha256": "1C459C2CD575DC06DA09757EF1375A451B9CF421603913CFB3B82D5ED0F3B06D",
+      "exe_sha256": "F7D25B387F3E67D3E0B65B6B480C01B09D0D7AF5DCE675CAF6ED105B8454BB7F",
+      "version_check": "Godot RE Tools v2.6.0; --gdre-version may return exit code 1, but recovery/list commands must return 0.",
+      "purpose": "List and recover user-authorized Godot 2.x/3.x/4.x PCK projects, decompile supported GDScript bytecode, and restore imported resources."
+    },
+    {
+      "name": "Godot Engine 3.2.3",
+      "version": "3.2.3-stable",
+      "local_path": "tools/Godot_3.2.3_stable_win64/Godot_v3.2.3-stable_win64.exe",
+      "archive_path": "tools/Godot_v3.2.3-stable_win64.exe.zip",
+      "source": "https://github.com/godotengine/godot/releases/download/3.2.3-stable/Godot_v3.2.3-stable_win64.exe.zip",
+      "release": "https://github.com/godotengine/godot/releases/tag/3.2.3-stable",
+      "license": "MIT",
+      "archive_sha512": "73E8376F2B1E6B884C4604BD6DF30A8AEA73975FA53D8A8D2F8D62C8CDA6D3B73D00BB2868A91635CD8C79A78F50CDE262FD3C325BDB9488CB16A7F1C231DD16",
+      "archive_sha256": "9C6232AAF1F34507DA75B286538A69E673B368D57A68BA0237B9EA9D6A764065",
+      "exe_sha256": "E53B6EA7964F3A89108C3DFDFECD8E98B64E822EC0846C47CE541897EA2E8664",
+      "version_check": "3.2.3.stable.official; this Windows build may return exit code 255 for --version, so validate hash plus stdout and process cleanup.",
+      "purpose": "Exact-version secondary static/editor parsing validation for recovered Godot 3.2.3 projects after tool/EditorPlugin/GDNative scanning; never run the game main scene."
+    },
+    {
       "name": "UnityPy",
       "version": "1.25.0",
       "local_path": "tools/python-env/Scripts/python.exe",
@@ -32,6 +59,35 @@
       "local_path": "tools/python-env/Scripts/pytest.exe",
       "source": "https://pypi.org/project/pytest/",
       "purpose": "Run GameAnalysis Skill regression tests through scripts/run_skill_tests.ps1 using the bundled Python environment."
+    },
+    {
+      "name": "Pillow",
+      "version": "12.2.0",
+      "local_path": "tools/python-env/Lib/site-packages/PIL",
+      "source": "https://pypi.org/project/Pillow/",
+      "license": "MIT-CMU",
+      "purpose": "Validate and fully decode configured image formats with Pillow verify/load before Godot recovered resources are classified and copied."
+    },
+    {
+      "name": "pefile",
+      "version": "2024.8.26",
+      "local_path": "tools/python-env/Lib/site-packages/pefile.py",
+      "source": "https://pypi.org/project/pefile/2024.8.26/",
+      "license": "MIT",
+      "sha256": "0D0EB68F0F169182613DC64B3AB50B20855508C1C1D2FAAFE8FCCF23EDB6A345",
+      "purpose": "Parse PE headers, sections, image base, .pdata runtime functions, and file/RVA mappings for local native-code analysis such as Klei/DST WorldSim binding recovery."
+    },
+    {
+      "name": "capstone",
+      "version": "5.0.9",
+      "local_path": "tools/python-env/Lib/site-packages/capstone",
+      "source": "https://pypi.org/project/capstone/5.0.9/",
+      "license": "BSD-3-Clause",
+      "sha256": {
+        "__init__.py": "94571D1314355E261AFF0DDFC94985FE8761232DDFF6874181FD21EFA9FAB47F",
+        "lib/capstone.dll": "76958E18380023A68FD1714FA2E01C594CC6DB1955A07AD6937B66E66DC5D6C3"
+      },
+      "purpose": "Disassemble x64 wrapper functions, recover direct call targets, and resolve RIP-relative strings during local native-code analysis."
     },
     {
       "name": "repak",
@@ -110,7 +166,7 @@
       "source": "https://github.com/vgmstream/vgmstream/releases/tag/r2117",
       "license": "ISC-like; see bundled COPYING",
       "sha256": "6C4A8A3813864FEFED081BBD337DBC0AD93BF88E0B92F5DB98D7AB258B22DC6C",
-      "purpose": "Fallback decoder for FSB banks that python-fsb5 cannot parse; used to export all subsongs to WAV."
+      "purpose": "Decode user-authorized game audio to WAV, including FSB fallback and Wwise external WEM plus every decodable BNK subsong. Metadata probes must use -m -I to prevent the CLI from writing a default WAV beside the input; decodes must always use an explicit -o path."
     },
     {
       "name": "KleiTEXConverter",
@@ -134,8 +190,53 @@
         "ktech.exe": "1510B759892850A8242E1944D8FEDFC9052B0AE3DE0A684BEBDA7C87CF040E53",
         "krane.exe": "9A8C972BC56C5093394A801D9FDF7CFF9689335C739247B984600A766EBAC71E"
       },
-      "status": "Downloaded for Klei TEX/animation fallback, but ktech.exe and krane.exe exit -1073741515 on this host due to missing native DLL dependencies.",
-      "purpose": "Candidate fallback for KTEX PNG conversion and Klei animation to Spriter/SCML when a runnable build is available."
+      "status": "krane.exe 4.4.0 is runnable on this host and was verified against a modern Wilson build: it produced a Spriter SCML project with 15 folders and 132 non-empty PNG files, and successfully round-tripped an official scml.exe export. Use an ordinary ASCII isolation root; non-ASCII paths reproduce MagickPNGErrorHandler/WriteBlob failures. ktech.exe remains a separate fallback and is not implied by this krane validation.",
+      "safety": "Extract ZIP members to an isolated ASCII directory and pass explicit build.bin/anim.bin inputs or their containing directory. Do not pass a broad game root, do not modify game ZIPs, and do not treat an axis-aligned BILD-to-canvas reconstruction as a visual fidelity check for multi-quad frames.",
+      "purpose": "Decompile a user-authorized Klei Build plus animation Bank into clean per-Symbol PNG files and an editable Spriter SCML seed, then validate official exports by round-trip."
+    },
+    {
+      "name": "BrashMonkey Spriter Essentials",
+      "version": "r7",
+      "local_path": "E:/GameTools/Spriter/Spriter.exe",
+      "source": "User-provided local installation; BrashMonkey Spriter manual documents SCML project authoring",
+      "license": "External user-installed application; not redistributed by this skill",
+      "sha256": "2235622664E41766E6651F4600C9EF693AF217CA1884426DA2D9F455260B2A17",
+      "validation": "Opened the generated xuanxiao.scml in the real GUI, showed the xuanxiao entity, 15 resource folders, 12 animations including BUILD_PLAYER, and rendered run_loop_down without shattered strips.",
+      "safety": "Launch Spriter.exe directly. The local shortcut targets a missing D: path. Never run Spriter_70036_177776.exe from the candidate software folder; audit identified it as a different product (全能电脑助手), not Spriter.",
+      "purpose": "Edit and visually validate DST-compatible SCML projects before compiling them with Klei's official scml.exe."
+    },
+    {
+      "name": "Klei Don't Starve Mod Tools SCML compiler",
+      "version": "official source commit 3fe0cad89848c9d0fca8a4139a0491d188497636; local VS2022 v143 Win32 release build",
+      "local_path": "tools/klei-ds-mod-tools_official/build/win32/mod_tools/scml.exe",
+      "source": "https://github.com/kleientertainment/ds_mod_tools",
+      "source_commit": "3fe0cad89848c9d0fca8a4139a0491d188497636",
+      "license": "MIT for Klei source and binaries; bundled third-party components retain their own licenses",
+      "sha256": "1C8FDE5250E01D67BE5E4FA212FCB3F30188186C1008BCBC90C0809D0C831297",
+      "build": {
+        "generator": "bundled premake4 --os=windows vs2010",
+        "compiler": "Visual Studio 2022 Community MSBuild / PlatformToolset v143 / Win32 Release",
+        "dependency_order": [
+          "modtoollib.vcxproj",
+          "scml.vcxproj"
+        ]
+      },
+      "runtime_patch": {
+        "reason": "The upstream Windows Python27 bundle omits python27.dll and VC90 CRT files on this host.",
+        "python": "Python 2.7.18 x86 official MSI",
+        "python_source": "https://www.python.org/ftp/python/2.7.18/python-2.7.18.msi",
+        "python_msi_sha256": "D901802E90026E9BAD76B8A81F8DD7E43C7D7E8269D9281C9E9DF7A9C40480A9",
+        "files_added": [
+          "python27.dll",
+          "msvcr90.dll",
+          "msvcp90.dll",
+          "msvcm90.dll",
+          "Microsoft.VC90.CRT.manifest"
+        ]
+      },
+      "validation": "Direct isolated compile of bundled wand.scml returned 0 and produced anim/wand.zip with build.bin, anim.bin and atlas-0.tex; output SHA-256 3D1DBFC71A0E0ACCDA47E26AD4B9B06F990809345E0B7CD696311D3CED8557B2.",
+      "safety": "Call scml.exe directly with an isolated SCML and mod root. Do not use autocompiler.exe for first-time or broad-root validation because it recursively scans visible mods directories.",
+      "purpose": "Compile user-authorized Spriter SCML plus transparent part PNGs into a character-owned Klei Build/Anim/Atlas package with compiler-generated pivots, meshes and UVs."
     },
     {
       "name": "Electron gallery viewer template",
@@ -164,7 +265,7 @@
       "build_script": "scripts/build_model_viewer_tool.ps1",
       "license": "Local wrapper; Electron MIT; Three.js MIT",
       "licenses_path": "built-in-tools/GameModelViewer_1.0.0/LICENSES/THIRD_PARTY_LICENSES.json",
-      "sha256": "701149EE4C68E3343BD6656C12F4F1AF029B6F5BDA981D55EE1E1A0310C98877",
+      "sha256": "97CDA0D9B4C128370404DA135C55F33F464B9F2F4D589755314C70D33A74827E",
       "purpose": "Offline local preview of GameAnalysis exported glTF/GLB/FBX models. Each project generates only a BAT launcher, manifest, thumbs, preview-cache, and error logs."
     },
     {
@@ -175,8 +276,38 @@
       "build_source": "assets/vfx-viewer-src",
       "build_script": "scripts/build_vfx_viewer_tool.ps1",
       "license": "Local wrapper; Electron runtime follows upstream Electron licensing.",
-      "sha256": "B88B8C897D389C026E096BF42C0C2E0521FA978EAA4957B59BDBC391B033F548",
-      "purpose": "Offline local preview of GameAnalysis Unity VFX manifests and best-effort reconstructed ParticleSystem, TrailRenderer, and LineRenderer data. Each project generates only a BAT launcher, manifest, reconstructed JSON, preview-cache, unity-export, and error/status records."
+      "sha256": "19FDCB007F362FF3840C208B0809E02283CB4C56B04E78E76663C316F0B45846",
+      "purpose": "Offline local preview of GameAnalysis Unity VFX manifests and best-effort reconstructed ParticleSystem, TrailRenderer, and LineRenderer data. Supports machine-readable UTF-8 self-test evidence through --self-test-output. Each project generates only a BAT launcher, manifest, reconstructed JSON, preview-cache, unity-export, and error/status records."
+    },
+    {
+      "name": "GameCharacterAnimationViewer",
+      "version": "0.1.0",
+      "local_path": "built-in-tools/GameCharacterAnimationViewer_0.1.0/GameCharacterAnimationViewer.exe",
+      "source": "AssetArchive-Dev derived local Tauri viewer",
+      "source_repository": "E:\\Github_Projects\\AssetArchive-Dev",
+      "source_remote": "https://github.com/dont-starve-mod/AssetArchive-Dev.git",
+      "source_commit": "74670963b45fc164a99e0b1e686a88cce3a9c438",
+      "source_dirty": true,
+      "build_process_environment": {
+        "CMAKE_POLICY_VERSION_MINIMUM": "3.5"
+      },
+      "custom_character_resources": "src-tauri/resources/custom-characters",
+      "install_config": "references/game-character-animation-viewer-config.json",
+      "install_script": "scripts/install_game_character_animation_viewer_tool.ps1",
+      "license": "MIT; copied beside the installed executable",
+      "sha256": "B3DFFC69AEA69154294EBFD8685D04076382C2B10FEA05A2EACD06EC3CE047DA",
+      "purpose": "Character-first Don't Starve Together animation browsing and live playback from the installed game root; independent of the legacy GameAnimationViewer Bank manifest."
+    },
+    {
+      "name": "GameAnimationViewer",
+      "version": "1.0.1",
+      "local_path": "built-in-tools/GameAnimationViewer_1.0.1/GameAnimationViewer.exe",
+      "source": "Local fixed Electron animation viewer built from assets/game-animation-viewer-src.",
+      "build_source": "assets/game-animation-viewer-src",
+      "build_script": "scripts/build_game_animation_viewer_tool.ps1",
+      "license": "Local wrapper; Electron runtime follows upstream Electron licensing.",
+      "sha256": "222CB6BA4EADC6D344A42FC93630A631A455F5CCD2E5A5D025F4608C3D96BBD2",
+      "purpose": "Offline local preview and export of real rendered GameAnalysis animation frames from manifest-authorized source roots. Supports machine-readable UTF-8 self-test evidence through --self-test-output; project study roots receive only launchers, preview caches, exports, and status records."
     },
     {
       "name": "ILSpy / ilspycmd",
@@ -203,8 +334,12 @@
       "name": "Ghidra",
       "version": "12.0.4",
       "local_path": "tools/Ghidra_12.0.4_PUBLIC/support/analyzeHeadless.bat",
-      "source": "https://github.com/NationalSecurityAgency/ghidra",
-      "purpose": "Analyze GameAssembly.dll native code and apply Il2CppDumper mappings to inspect behavior relevant to art, animation, UI, VFX, camera, and audio."
+      "archive_path": "tools/ghidra_12.0.4_PUBLIC_20260303.zip",
+      "source": "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_12.0.4_build/ghidra_12.0.4_PUBLIC_20260303.zip",
+      "license": "Apache-2.0",
+      "sha256": "C3B458661D69E26E203D739C0C82D143CC8A4A29D9E571F099C2CF4BDA62A120",
+      "version_check": "Headless usage banner is available when JAVA_HOME points to tools/JDK21; this build does not support a standalone -version flag.",
+      "purpose": "Analyze native code for Unity GameAssembly.dll, Klei/DST WorldSim PE functions, and other user-authorized local binaries; use targeted decompile CSVs instead of broad source dumps."
     },
     {
       "name": "JDK",

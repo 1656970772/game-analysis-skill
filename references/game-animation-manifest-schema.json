@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "game-animation-manifest-schema.json",
+  "title": "Game Animation Preview Manifest",
+  "type": "object",
+  "required": ["schema_version", "adapter", "study_root", "source_roots", "items"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "adapter": {"type": "string", "minLength": 1},
+    "study_root": {"const": "."},
+    "source_roots": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"type": "string", "minLength": 1},
+      "additionalProperties": {"$ref": "#/$defs/relativePath"}
+    },
+    "items": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/item"}
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "anyOf": [
+          {"pattern": "^(?:[A-Za-z]:|[\\\\/])"},
+          {"pattern": "(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)"},
+          {"pattern": "(?:^|[\\\\/])\\.(?:[\\\\/]|$)"},
+          {"pattern": "[\\u0000\\r\\n]"}
+        ]
+      }
+    },
+    "asset": {
+      "type": "object",
+      "required": ["kind", "path"],
+      "properties": {
+        "kind": {"type": "string"},
+        "path": {"$ref": "#/$defs/relativePath"}
+      },
+      "additionalProperties": true
+    },
+    "capabilities": {
+      "type": "object",
+      "required": ["current_frame_png", "png_sequence", "apng", "gif", "source_bundle"],
+      "properties": {
+        "current_frame_png": {"type": "boolean"},
+        "png_sequence": {"type": "boolean"},
+        "apng": {"type": "boolean"},
+        "gif": {"type": "boolean"},
+        "source_bundle": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "clip": {
+      "type": "object",
+      "required": ["id", "name", "fps", "frame_count", "declared_frame_count", "source_path", "preview_status", "capabilities", "reasons"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string"},
+        "fps": {"type": "number", "minimum": 0},
+        "frame_count": {"type": "integer", "minimum": 0},
+        "declared_frame_count": {"type": "integer", "minimum": 0},
+        "source_path": {"$ref": "#/$defs/relativePath"},
+        "symbols": {"type": "array", "items": {"type": "string"}},
+        "preview_status": {"enum": ["ready", "partial", "blocked"]},
+        "capabilities": {"$ref": "#/$defs/capabilities"},
+        "reasons": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "buildCandidate": {
+      "type": "object",
+      "required": ["id", "build", "score", "symbol_coverage", "atlas_complete", "reasons", "preview_status", "capabilities", "preview_reasons"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "build": {
+          "type": "object",
+          "required": ["name", "package", "source_path"],
+          "properties": {
+            "name": {"type": "string"},
+            "package": {"type": "string"},
+            "source_path": {"$ref": "#/$defs/relativePath"}
+          }
+        },
+        "score": {"type": "number"},
+        "symbol_coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "missing_symbols": {"type": "array", "items": {"type": "string"}},
+        "missing_symbol_policy": {"enum": ["strict", "skip"]},
+        "atlas_complete": {"type": "boolean"},
+        "reasons": {"type": "array", "items": {"type": "string"}},
+        "preview_status": {"enum": ["ready", "partial", "blocked"]},
+        "capabilities": {"$ref": "#/$defs/capabilities"},
+        "preview_reasons": {"type": "array", "items": {"type": "string"}},
+        "atlases": {"type": "array", "items": {"$ref": "#/$defs/relativePath"}}
+      },
+      "additionalProperties": true
+    },
+    "item": {
+      "type": "object",
+      "required": ["id", "adapter", "category", "confidence", "reasons", "bank", "build_candidates", "default_build_id", "clips", "source_assets", "capabilities", "preview_status", "warnings", "errors"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "adapter": {"type": "string", "minLength": 1},
+        "category": {"type": "string"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "reasons": {"type": "array", "items": {"type": "string"}},
+        "bank": {
+          "type": "object",
+          "required": ["name", "package", "source_path"],
+          "properties": {
+            "name": {"type": "string"},
+            "package": {"type": "string"},
+            "source_path": {"$ref": "#/$defs/relativePath"}
+          }
+        },
+        "build_candidates": {"type": "array", "items": {"$ref": "#/$defs/buildCandidate"}},
+        "default_build_id": {"type": ["string", "null"]},
+        "clips": {"type": "array", "items": {"$ref": "#/$defs/clip"}},
+        "source_assets": {"type": "array", "items": {"$ref": "#/$defs/asset"}},
+        "capabilities": {"$ref": "#/$defs/capabilities"},
+        "preview_status": {"enum": ["ready", "partial", "blocked"]},
+        "warnings": {"type": "array", "items": {"type": "string"}},
+        "errors": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    }
+  }
+}

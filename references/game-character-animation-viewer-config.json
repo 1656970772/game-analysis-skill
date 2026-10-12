@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "name": "GameCharacterAnimationViewer",
+    "version": "0.1.0",
+    "executable_name": "GameCharacterAnimationViewer.exe",
+    "install_relative": "built-in-tools/GameCharacterAnimationViewer_0.1.0",
+    "license_name": "LICENSE.AssetArchive.txt",
+    "origin_name": "ORIGIN.json",
+    "version_name": "VERSION.txt",
+    "custom_character_install_relative": "custom-characters"
+  },
+  "source_repository": {
+    "default_path": "E:/Github_Projects/AssetArchive-Dev",
+    "license_relative": "LICENSE",
+    "custom_character_resources_relative": "src-tauri/resources/custom-characters",
+    "artifact_candidates": [
+      "src-tauri/target/x86_64-pc-windows-msvc/release/GameCharacterAnimationViewer.exe",
+      "src-tauri/target/x86_64-pc-windows-msvc/release/Asset Archive.exe",
+      "src-tauri/target/release/GameCharacterAnimationViewer.exe",
+      "src-tauri/target/release/Asset Archive.exe"
+    ]
+  },
+  "build": {
+    "command": "npm.cmd",
+    "working_directory_relative": ".",
+    "arguments": [
+      "run",
+      "tauri",
+      "build",
+      "--release",
+      "--",
+      "--target",
+      "x86_64-pc-windows-msvc",
+      "--features",
+      "publish"
+    ],
+    "process_environment": {
+      "CMAKE_POLICY_VERSION_MINIMUM": "3.5"
+    }
+  },
+  "launch": {
+    "game_root_environment": "GAME_ANALYSIS_DST_ROOT",
+    "launcher_relative": "2.\u62a5\u544a/\u6253\u5f00\u52a8\u753b\u9884\u89c8.bat",
+    "log_relative": "4.\u4e34\u65f6\u76ee\u5f55/\u4e2d\u95f4\u7d22\u5f15/\u6e38\u620f\u52a8\u753b\u9884\u89c8/viewer-launch.log",
+    "project_config_relative": "4.\u4e34\u65f6\u76ee\u5f55/\u4e2d\u95f4\u7d22\u5f15/\u6e38\u620f\u52a8\u753b\u9884\u89c8/character-viewer-project.json",
+    "support_script_relative": "scripts/launch_game_character_animation_viewer.ps1"
+  }
+}

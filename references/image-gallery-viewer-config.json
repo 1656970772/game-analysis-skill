@@ -1,0 +1,60 @@
+{
+  "tool": {
+    "name": "GameImageGallery",
+    "version": "1.0.0",
+    "exe_relative_path": "built-in-tools/GameImageGallery_1.0.0/GameImageGallery.exe",
+    "source_template_dir": "assets/image-gallery-viewer-src"
+  },
+  "launcher": {
+    "bat_name": "打开图片画廊.bat",
+    "window_title": "GameAnalysis 图片画廊"
+  },
+  "paths": {
+    "report_dir": "2.报告",
+    "index_dir": "4.临时目录/中间索引/图片画廊",
+    "manifest_name": "manifest.json",
+    "errors_name": "errors.jsonl",
+    "thumbnails_dir": "thumbnails"
+  },
+  "default_image_roots": [
+    {
+      "label": "分类图片",
+      "relative_path": "1.分类资源/图片"
+    }
+  ],
+  "image_extensions": [
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".bmp",
+    ".webp",
+    ".gif",
+    ".tga"
+  ],
+  "thumbnail": {
+    "max_size": 360,
+    "format": "PNG",
+    "checker_dark": "#1f1f1f",
+    "checker_light": "#2b2b2b",
+    "checker_cell": 16
+  },
+  "manifest": {
+    "schema_version": 1,
+    "status_values": [
+      "ready",
+      "thumbnail_failed",
+      "unsupported",
+      "missing"
+    ],
+    "max_error_records": 500
+  },
+  "ui": {
+    "default_sort": "path_asc",
+    "page_sizes": [
+      120,
+      240,
+      480
+    ],
+    "default_page_size": 480
+  }
+}

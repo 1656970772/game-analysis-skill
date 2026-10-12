@@ -234,6 +234,27 @@ def decode_bank_with_vgmstream(vgmstream: Path, bank_path: Path, out_dir: Path, 
     return code == 0 and bool(after), created, len(after), out
 
 
+def fallback_wav_sort_key(path: Path) -> tuple[int, int | str, str]:
+    prefix = path.stem.split("_", 1)[0]
+    if prefix.isdigit():
+        return (0, int(prefix), path.name.lower())
+    return (1, path.stem.lower(), path.name.lower())
+
+
+def fallback_wav_metadata(path: Path, fallback_index: int) -> tuple[str, str]:
+    stem = path.stem
+    sample_index = str(fallback_index)
+    sample_name = stem
+    if "_" in stem:
+        prefix, rest = stem.split("_", 1)
+        if prefix.isdigit():
+            sample_index = prefix
+            sample_name = rest
+    if sample_name.lower().endswith(".wav"):
+        sample_name = sample_name[:-4]
+    return sample_index, sample_name or stem
+
+
 def convert_audio(game_root: Path, fsb_pkg: Path, vgmstream: Path | None, limit_banks: int, limit_samples: int, force: bool, dirs: dict[str, Path]) -> dict[str, int]:
     sound_root = game_root / "data" / "sound"
     fsb_files = sorted(sound_root.glob("*.fsb")) if sound_root.exists() else []
@@ -273,12 +294,24 @@ def convert_audio(game_root: Path, fsb_pkg: Path, vgmstream: Path | None, limit_
                 banks_done += 1
             except Exception as exc:
                 if vgmstream and vgmstream.exists() and limit_samples == 0:
+                    fallback_before = {p.name for p in out_dir.glob("*.wav")}
                     ok, created, total_wavs, log = decode_bank_with_vgmstream(vgmstream, bank_path, out_dir, force)
                     if ok:
                         banks_done += 1
                         samples_written += created
                         samples_skipped += max(0, total_wavs - created)
-                        rows.append({"bank": str(bank_path), "sample_index": "", "sample_name": "vgmstream fallback", "output": str(out_dir), "status": "converted"})
+                        wav_paths = sorted(out_dir.glob("*.wav"), key=fallback_wav_sort_key)
+                        for fallback_idx, wav_path in enumerate(wav_paths):
+                            sample_index, sample_name = fallback_wav_metadata(wav_path, fallback_idx)
+                            rows.append(
+                                {
+                                    "bank": str(bank_path),
+                                    "sample_index": sample_index,
+                                    "sample_name": sample_name,
+                                    "output": str(wav_path),
+                                    "status": "skipped" if wav_path.name in fallback_before else "converted",
+                                }
+                            )
                     else:
                         banks_failed += 1
                         err.write(json.dumps({"bank": str(bank_path), "error": str(exc), "fallback": log}, ensure_ascii=False) + "\n")

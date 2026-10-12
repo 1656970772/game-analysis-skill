@@ -1,0 +1,40 @@
+{
+  "name": "game-model-viewer",
+  "version": "1.0.0",
+  "description": "Local Electron and Three.js model viewer for GameAnalysis study outputs.",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "self-test": "electron . --self-test",
+    "dist": "electron-builder --win portable --x64"
+  },
+  "dependencies": {
+    "three": "^0.181.2"
+  },
+  "devDependencies": {
+    "electron": "^39.2.6",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "local.gameanalysis.modelviewer",
+    "productName": "GameModelViewer",
+    "artifactName": "GameModelViewer.${ext}",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "package.json",
+      "src/**/*",
+      "node_modules/three/**/*"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ]
+    }
+  }
+}

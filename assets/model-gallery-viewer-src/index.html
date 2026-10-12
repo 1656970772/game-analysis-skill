@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' app://asset data:; script-src 'self' 'sha256-801UhbyTQSPFX7nUK3aFmqbibU5d/QwsJvf4koIpGL4='; style-src 'self'; img-src 'self' app://asset data: blob:; connect-src 'self' app://asset data: blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GameModelViewer</title>
+    <link rel="stylesheet" href="./src/styles.css">
+    <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./src/vendor/three-addons/"}}</script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <div>
+            <h1>GameModelViewer</h1>
+            <p id="runtime-meta">正在读取模型清单</p>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="open-folder" type="button">打开目录</button>
+          <button id="open-thumbs" type="button">打开缩略图目录</button>
+          <button id="copy-path" type="button">复制路径</button>
+        </div>
+      </header>
+
+      <main class="gallery-workspace">
+        <section class="gallery-panel" aria-label="模型缩略图画廊">
+          <div class="gallery-controls">
+            <div id="status-meta" class="status-meta">0 / 0</div>
+            <div class="search-row">
+              <label for="filter-text">搜索</label>
+              <input id="filter-text" type="search" autocomplete="off" placeholder="名称、路径或标签">
+            </div>
+
+            <div class="filter-grid">
+              <div class="filter-field">
+                <label for="filter-format">格式</label>
+                <select id="filter-format"></select>
+              </div>
+
+              <div class="filter-field">
+                <label for="filter-texture">贴图</label>
+                <select id="filter-texture"></select>
+              </div>
+
+              <div class="filter-field">
+                <label for="filter-preview">预览</label>
+                <select id="filter-preview"></select>
+              </div>
+
+              <div class="filter-field">
+                <label for="filter-tags">标签</label>
+                <select id="filter-tags"></select>
+              </div>
+            </div>
+          </div>
+
+          <div id="model-grid" class="model-grid" aria-label="模型缩略图"></div>
+        </section>
+      </main>
+
+      <div id="preview-overlay" class="preview-overlay" hidden>
+        <button id="preview-close" class="preview-close" type="button" aria-label="关闭预览" title="关闭预览">&times;</button>
+        <section class="preview-stage" aria-label="模型全屏预览">
+          <div class="viewer-pane" aria-label="模型视口">
+            <div id="viewport" class="viewport"></div>
+            <button id="prev-model" class="viewer-nav viewer-nav-prev" type="button" aria-label="上一个模型" title="上一个模型">&lsaquo;</button>
+            <button id="next-model" class="viewer-nav viewer-nav-next" type="button" aria-label="下一个模型" title="下一个模型">&rsaquo;</button>
+            <div id="viewport-error" class="viewport-error" hidden></div>
+            <div class="preview-info" aria-label="模型信息">
+              <h2 id="model-title">未选择模型</h2>
+              <dl id="model-meta"></dl>
+              <div id="preview-actions" class="preview-actions">
+                <button id="full-body-preview" class="full-body-preview-button" type="button" hidden>全身预览</button>
+              </div>
+              <p id="model-errors" class="model-errors"></p>
+            </div>
+          </div>
+          <aside id="animation-sidebar" class="animation-sidebar" aria-label="动画列表" hidden>
+            <div class="animation-sidebar-header">
+              <h3>动画列表</h3>
+              <span id="animation-count">0</span>
+            </div>
+            <select id="animation-select" class="visually-hidden" aria-label="动作"></select>
+            <div id="animation-list" class="animation-list" role="listbox" aria-label="动作列表"></div>
+          </aside>
+          <div id="animation-panel" class="animation-panel" aria-label="动画播放控制" hidden>
+            <button id="animation-toggle" class="transport-button" type="button">播放</button>
+            <div class="transport-main">
+              <div class="transport-meta">
+                <span id="animation-current-name" class="animation-current-name">未选择动作</span>
+                <span id="animation-time" class="animation-time">0.00 / 0.00s</span>
+              </div>
+              <input id="animation-timeline" type="range" min="0" max="0" step="0.01" value="0">
+            </div>
+            <label class="speed-control" for="animation-speed">速度</label>
+            <input id="animation-speed" class="animation-speed" type="range" min="0.25" max="2" step="0.25" value="1">
+            <div id="animation-status" class="animation-status"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script type="module" src="./src/renderer.js"></script>
+  </body>
+</html>

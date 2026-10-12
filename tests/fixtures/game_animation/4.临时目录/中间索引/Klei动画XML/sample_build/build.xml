@@ -1,0 +1,22 @@
+<Build name="sample_visual_build">
+  <Texture filename="atlas-0.tex"/>
+  <Texture filename="atlas-1.tex"/>
+  <Symbol name="back">
+    <Frame framenum="0" duration="2" alphaidx="0" alphacount="6"/>
+  </Symbol>
+  <Symbol name="front">
+    <Frame framenum="0" duration="2" alphaidx="6" alphacount="6"/>
+  </Symbol>
+  <Alphavert x="-2" y="-2" u="0" v="1" w="0"/>
+  <Alphavert x="2" y="-2" u="1" v="1" w="0"/>
+  <Alphavert x="-2" y="2" u="0" v="0" w="0"/>
+  <Alphavert x="2" y="-2" u="1" v="1" w="0"/>
+  <Alphavert x="2" y="2" u="1" v="0" w="0"/>
+  <Alphavert x="-2" y="2" u="0" v="0" w="0"/>
+  <Alphavert x="-2" y="-2" u="0" v="1" w="1"/>
+  <Alphavert x="2" y="-2" u="1" v="1" w="1"/>
+  <Alphavert x="-2" y="2" u="0" v="0" w="1"/>
+  <Alphavert x="2" y="-2" u="1" v="1" w="1"/>
+  <Alphavert x="2" y="2" u="1" v="0" w="1"/>
+  <Alphavert x="-2" y="2" u="0" v="0" w="1"/>
+</Build>

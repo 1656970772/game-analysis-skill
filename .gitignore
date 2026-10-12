@@ -1,4 +1,6 @@
 tools/
+built-in-tools/
+.worktrees/
 .pytest_cache/
 __pycache__/
 *.pyc

@@ -1,0 +1,12 @@
+<Anims>
+  <anim name="idle" root="sample_bank" framerate="10" numframes="2">
+    <frame w="10" h="10" x="0" y="0">
+      <element name="back" layername="back_layer" frame="0" z_index="10" m_a="1" m_b="0" m_c="0" m_d="1" m_tx="0" m_ty="0"/>
+      <element name="front" layername="front_layer" frame="0" z_index="5" m_a="1" m_b="0" m_c="0" m_d="1" m_tx="1" m_ty="0"/>
+    </frame>
+    <frame w="12" h="12" x="2" y="0">
+      <element name="back" layername="back_layer" frame="1" z_index="10" m_a="0" m_b="1" m_c="-1" m_d="0" m_tx="4" m_ty="0"/>
+      <element name="front" layername="front_layer" frame="1" z_index="5" m_a="1" m_b="0" m_c="0" m_d="1" m_tx="2" m_ty="0"/>
+    </frame>
+  </anim>
+</Anims>

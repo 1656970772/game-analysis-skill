@@ -4,7 +4,10 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 SCRIPT_DIR = Path(__file__).resolve().parents[1] / "scripts"
+SCRIPT_PATH = SCRIPT_DIR / "cocos_creator_astc_repair.py"
 sys.path.insert(0, str(SCRIPT_DIR))
 
 from cocos_creator_astc_repair import (  # noqa: E402
@@ -62,5 +65,26 @@ def test_collect_role_scene_assets_uses_paths_key_as_uuid_index(tmp_path: Path) 
 
 def test_find_astcenc_prefers_skill_tool() -> None:
     astcenc = find_astcenc()
+    if astcenc is None:
+        pytest.skip("astcenc is optional in local test environments")
     assert astcenc is not None
     assert astcenc.name == "astcenc-sse4.1.exe"
+
+
+def test_cocos_repair_uses_fixed_image_gallery_pipeline() -> None:
+    source = SCRIPT_PATH.read_text(encoding="utf-8")
+
+    assert "build_image_gallery_manifest" in source
+    assert "create_image_gallery_launcher" in source
+    assert "write_fixed_image_gallery" in source
+    main_source = source[source.index("def main(") :]
+    assert "write_gallery(" not in main_source
+    assert 'study_root / "2.报告" / "角色场景资源画廊"' not in main_source
+    assert 'study_root / "2.报告" / "主角候选资源画廊"' not in main_source
+
+
+def test_cocos_validation_log_uses_temp_tool_log_dir() -> None:
+    source = SCRIPT_PATH.read_text(encoding="utf-8")
+
+    assert 'study_root / "4.临时目录" / "工具日志" / "验证日志.md"' in source
+    assert 'study_root / "2.报告" / "验证日志.md"' not in source

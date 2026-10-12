@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/1656970772/game-analysis-skill",
+  "tag": "v2026.10.12",
+  "archive": {
+    "name": "game-analysis-built-in-tools-windows-x64.zip",
+    "bytes": 452819868,
+    "sha256": "DD44B76D9F2F09FC2B2745817981E8FB7F3A83A44B55652AF7C85D787FE5088C"
+  },
+  "tools": [
+    {
+      "name": "GameImageGallery",
+      "version": "1.0.0",
+      "directory": "built-in-tools/GameImageGallery_1.0.0",
+      "executable": "built-in-tools/GameImageGallery_1.0.0/GameImageGallery.exe",
+      "executable_sha256": "4137739AA6805EC9FE8DF07D4E983632FA8A2FB8DEA6F54F17794CED83A86579",
+      "file_count": 75
+    },
+    {
+      "name": "GameModelViewer",
+      "version": "1.0.0",
+      "directory": "built-in-tools/GameModelViewer_1.0.0",
+      "executable": "built-in-tools/GameModelViewer_1.0.0/GameModelViewer.exe",
+      "executable_sha256": "97CDA0D9B4C128370404DA135C55F33F464B9F2F4D589755314C70D33A74827E",
+      "file_count": 3
+    },
+    {
+      "name": "GameAnimationViewer",
+      "version": "1.0.1",
+      "directory": "built-in-tools/GameAnimationViewer_1.0.1",
+      "executable": "built-in-tools/GameAnimationViewer_1.0.1/GameAnimationViewer.exe",
+      "executable_sha256": "222CB6BA4EADC6D344A42FC93630A631A455F5CCD2E5A5D025F4608C3D96BBD2",
+      "file_count": 75
+    },
+    {
+      "name": "GameVfxViewer",
+      "version": "1.0.0",
+      "directory": "built-in-tools/GameVfxViewer_1.0.0",
+      "executable": "built-in-tools/GameVfxViewer_1.0.0/GameVfxViewer.exe",
+      "executable_sha256": "19FDCB007F362FF3840C208B0809E02283CB4C56B04E78E76663C316F0B45846",
+      "file_count": 2
+    }
+  ],
+  "excluded": [
+    {
+      "path": "built-in-tools/GameCharacterAnimationViewer_0.1.0",
+      "reason": "外部派生预览器内嵌 FMOD 组件，本地缺少相应再分发许可说明；项目素材还包含 Wilson 图集模板。"
+    },
+    {
+      "path": "built-in-tools/GameAnimationViewer_1.0.0",
+      "reason": "已由 1.0.1 替代。"
+    },
+    {
+      "path": "tools/",
+      "reason": "第三方工具、Python 环境和构建缓存按 tooling-manifest.json 在本机恢复。"
+    }
+  ]
+}

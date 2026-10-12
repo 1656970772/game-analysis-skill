@@ -136,3 +136,68 @@ def test_build_learning_indices_writes_learning_outputs(tmp_path: Path) -> None:
     assert (output_root / "命名规范统计.csv").exists()
     assert json.loads((output_root / "学习输出摘要.json").read_text(encoding="utf-8"))["unitypy_index_count"] == 1
     assert summary["output_root"] == str(output_root)
+
+
+def test_build_learning_indices_discovers_suffixed_full_export_roots(tmp_path: Path) -> None:
+    study_root = tmp_path / "Study"
+    unitypy_index = (
+        study_root
+        / "0.原始导出"
+        / "UnityPy_GameFramework解密资源"
+        / "UnityPy全量可读资源"
+        / "all_resources_index.csv"
+    )
+    write_csv(
+        unitypy_index,
+        [
+            {
+                "asset_id": "audio",
+                "source_file": "SoundSubset.dat",
+                "path_id": "1",
+                "asset_type": "AudioClip",
+                "asset_name": "BGM_Battle",
+                "container_path": "",
+                "export_kind": "ogg",
+                "export_path": "audio/BGM_Battle.ogg",
+                "width": "",
+                "height": "",
+                "status": "exported",
+                "remarks": "",
+            },
+            {
+                "asset_id": "anim",
+                "source_file": "AnimationSubset.dat",
+                "path_id": "2",
+                "asset_type": "AnimationClip",
+                "asset_name": "Hero_Run",
+                "container_path": "",
+                "export_kind": "metadata",
+                "export_path": "metadata/AnimationClip/Hero_Run.json",
+                "width": "",
+                "height": "",
+                "status": "exported",
+                "remarks": "",
+            },
+        ],
+    )
+    assetripper_asset = (
+        study_root
+        / "0.原始导出"
+        / "AssetRipper_GameFramework解密资源"
+        / "ExportedProject"
+        / "Assets"
+        / "hit.wav"
+    )
+    assetripper_asset.parent.mkdir(parents=True)
+    assetripper_asset.write_bytes(b"RIFF")
+
+    summary = build_indices(study_root)
+    output_root = study_root / "4.临时目录" / "中间索引" / "学习输出"
+
+    assert summary["unitypy_index_count"] == 1
+    assert summary["audio_rows"] == 2
+    assert summary["animation_rows"] == 1
+    assert {row["asset_name"] for row in read_rows(output_root / "音频资源索引.csv")} == {
+        "BGM_Battle",
+        "hit",
+    }

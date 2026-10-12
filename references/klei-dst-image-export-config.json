@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "scan": {
+    "texture_extensions": [
+      ".tex"
+    ],
+    "direct_image_extensions": [
+      ".png",
+      ".jpg",
+      ".jpeg",
+      ".tga"
+    ],
+    "atlas_metadata_extensions": [
+      ".xml"
+    ],
+    "archive_extensions": [
+      ".zip"
+    ],
+    "max_nested_archive_depth": 2,
+    "max_loose_file_bytes": 1073741824,
+    "max_member_uncompressed_bytes": 536870912,
+    "max_archive_selected_uncompressed_bytes": 2147483648,
+    "max_compression_ratio": 512.0
+  },
+  "paths": {
+    "raw_root": "0.原始导出/KleiDST",
+    "raw_packages": "packages",
+    "raw_packages_extracted": "packages_extracted",
+    "raw_textures": "textures_ktex",
+    "raw_direct_images": "direct_images",
+    "raw_atlas_metadata": "atlas_metadata",
+    "classified_images": "1.分类资源/图片/图集/KleiTEX",
+    "classified_terrain": "1.分类资源/图片/地形贴图",
+    "index_root": "4.临时目录/中间索引/KleiDST/图片补全"
+  },
+  "tools": {
+    "stex_relative_path": "tools/Stex_v0.6_Windows_Static_x64/bin/Stex.exe"
+  },
+  "terrain": {
+    "archive_minimum_confidence": "high",
+    "rules": [
+      {
+        "id": "levels_tiles_path",
+        "confidence": "high",
+        "reason": "资源位于 levels/tiles 地块图集目录",
+        "category": "地图Tile图集PNG",
+        "path_regex": "(?:^|/)levels/tiles(?:/|$)"
+      },
+      {
+        "id": "road_path_auxiliary_textures",
+        "confidence": "high",
+        "reason": "资源 basename 位于审计确认的道路与路径辅助纹理白名单",
+        "category": "道路与噪声PNG",
+        "path_regex": "(?:^|/)images/(?:roadnoise|roadedge|roadcorner|roadendcap|pathnoise|mini_pathnoise)\\.(?:tex|png|jpg|jpeg|tga)$"
+      },
+      {
+        "id": "minimap_terrain_atlas",
+        "confidence": "high",
+        "reason": "资源是 minimap_atlas 数字变体或 minimap_paper 地图底图",
+        "category": "小地图图集与底图PNG",
+        "path_regex": "(?:^|/)(?:minimap/minimap_atlas\\d*|images/minimap_paper)\\.(?:tex|png|jpg|jpeg|tga)$"
+      },
+      {
+        "id": "levels_textures_minimap_surface",
+        "confidence": "high",
+        "reason": "资源位于 levels/textures 且文件名以 mini_ 开头或以 _mini 结尾",
+        "category": "小地图地表纹理PNG",
+        "path_regex": "(?:^|/)levels/textures/(?:[^/]+/)*(?:mini_[^/]+|[^/]+_mini)\\.(?:tex|png|jpg|jpeg|tga)$"
+      },
+      {
+        "id": "levels_textures_path",
+        "confidence": "high",
+        "reason": "资源位于 levels/textures 关卡地表、噪声或材质纹理目录",
+        "category": "地表噪声与材质PNG",
+        "path_regex": "(?:^|/)levels/textures(?:/|$)"
+      },
+      {
+        "id": "terrain_named_directory",
+        "confidence": "high",
+        "reason": "资源位于明确命名的 terrain/ground_tiles 目录",
+        "category": "地表噪声与材质PNG",
+        "path_regex": "(?:^|/)(?:terrain|ground_tiles)(?:/|$)"
+      },
+      {
+        "id": "turf_inventory_or_ground_fx",
+        "confidence": "medium",
+        "reason": "路径含 turf/ground，但可能是物品图标或地面特效，不自动归入地形图集",
+        "category": "地表噪声与材质PNG",
+        "path_regex": "(?:^|/)(?:turf|turfs|ground)(?:[_/.-]|$)"
+      }
+    ]
+  }
+}

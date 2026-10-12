@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "name": "GameVfxViewer",
+    "version": "1.0.0",
+    "directory": "built-in-tools/GameVfxViewer_1.0.0",
+    "source_template_dir": "assets/vfx-viewer-src",
+    "exe_name": "GameVfxViewer.exe"
+  },
+  "launcher": {
+    "bat_name": "打开特效预览.bat",
+    "environment_exe": "GAME_ANALYSIS_VFX_VIEWER",
+    "environment_skill_root": "GAME_ANALYSIS_SKILL_ROOT",
+    "window_title": "Unity 动态特效预览"
+  },
+  "paths": {
+    "report_dir": "2.报告",
+    "overview_name": "Unity动态特效预览总览.html",
+    "unitypy_index": "0.原始导出/UnityPy/UnityPy全量可读资源/all_resources_index.csv",
+    "unitypy_root": "0.原始导出/UnityPy/UnityPy全量可读资源",
+    "classified_vfx_dir": "1.分类资源/特效",
+    "assetripper_prefab_index": "4.临时目录/中间索引/AssetRipper分析/Prefab索引.csv",
+    "assetripper_export_root": "0.原始导出/AssetRipper",
+    "preview_index_dir": "4.临时目录/中间索引/VFX预览",
+    "manifest_name": "manifest.json",
+    "errors_name": "errors.jsonl",
+    "reconstructed_dir": "reconstructed",
+    "preview_cache_dir": "preview-cache",
+    "unity_export_dir": "unity-export"
+  },
+  "manifest": {
+    "schema_version": 1,
+    "preview_status": [
+      "pending",
+      "ready",
+      "partial",
+      "resource_only",
+      "failed",
+      "unsupported"
+    ],
+    "reconstruction_status": [
+      "pending",
+      "full",
+      "partial",
+      "resource_only",
+      "failed"
+    ],
+    "unity_export_status": [
+      "pending",
+      "ready",
+      "partial",
+      "skipped",
+      "failed"
+    ],
+    "max_error_records": 2000
+  },
+  "state_machine": {
+    "manifest_initial": {
+      "preview_status": "pending",
+      "reconstruction_status": "pending",
+      "unity_export_status": "pending"
+    },
+    "preview_transitions": {
+      "pending": ["ready", "partial", "resource_only", "failed", "unsupported"],
+      "partial": ["ready", "failed"],
+      "resource_only": ["partial", "failed"]
+    },
+    "reconstruction_transitions": {
+      "pending": ["full", "partial", "resource_only", "failed"],
+      "partial": ["full", "failed"],
+      "resource_only": ["partial", "failed"]
+    },
+    "unity_export_transitions": {
+      "pending": ["ready", "partial", "skipped", "failed"],
+      "partial": ["ready", "failed"]
+    }
+  },
+  "adapter": {
+    "default_engine": "unity",
+    "unity": {
+      "root_types": [
+        "ParticleSystem",
+        "TrailRenderer",
+        "LineRenderer"
+      ],
+      "supported_modules": [
+        "main",
+        "emission",
+        "shape",
+        "velocityOverLifetime",
+        "colorOverLifetime",
+        "sizeOverLifetime",
+        "textureSheetAnimation",
+        "renderer",
+        "trail",
+        "line"
+      ],
+      "module_aliases": {
+        "InitialModule": "main",
+        "EmissionModule": "emission",
+        "ShapeModule": "shape",
+        "VelocityModule": "velocityOverLifetime",
+        "ColorModule": "colorOverLifetime",
+        "SizeModule": "sizeOverLifetime",
+        "TextureSheetAnimationModule": "textureSheetAnimation",
+        "ParticleSystemRenderer": "renderer",
+        "TrailRenderer": "trail",
+        "LineRenderer": "line"
+      },
+      "defaults": {
+        "main": {
+          "duration": 5.0,
+          "loop": true,
+          "startLifetime": {
+            "constant": 5.0
+          },
+          "startSpeed": {
+            "constant": 1.0
+          },
+          "startSize": {
+            "constant": 1.0
+          }
+        },
+        "emission": {
+          "rateOverTime": {
+            "constant": 10.0
+          }
+        },
+        "renderer": {
+          "renderMode": "Billboard"
+        },
+        "trail": {
+          "time": 0.5
+        },
+        "line": {
+          "widthMultiplier": 1.0
+        }
+      }
+    }
+  },
+  "unity_export": {
+    "asset_root": "Assets/GameAnalysisVfxPreview",
+    "prefabs_dir": "Prefabs",
+    "materials_dir": "Materials",
+    "textures_dir": "Textures",
+    "meshes_dir": "Meshes",
+    "animations_dir": "Animations",
+    "scripts_dir": "Scripts",
+    "metadata_dir": "Metadata",
+    "bootstrap_script_name": "GameAnalysisVfxBootstrap.cs"
+  },
+  "name_keyword_rules": [
+    {
+      "tag": "vfx:fire",
+      "keywords": ["fire", "flame", "burn", "yan", "huo", "火", "炎"]
+    },
+    {
+      "tag": "vfx:smoke",
+      "keywords": ["smoke", "fog", "mist", "yanwu", "烟", "雾"]
+    },
+    {
+      "tag": "vfx:spark",
+      "keywords": ["spark", "sparks", "lightning", "thunder", "dian", "lei", "电", "雷"]
+    },
+    {
+      "tag": "vfx:slash",
+      "keywords": ["slash", "trail", "sword", "jian", "dao", "blade", "斩", "剑", "刀"]
+    },
+    {
+      "tag": "vfx:magic",
+      "keywords": ["magic", "arcane", "spell", "skill", "fx", "vfx", "effect", "法", "术"]
+    },
+    {
+      "tag": "vfx:particle",
+      "keywords": ["particle", "particles", "ptc", "eff"]
+    }
+  ],
+  "limits": {
+    "max_config_depth": 6,
+    "max_items": 20000,
+    "max_reconstruction_nodes": 5000,
+    "max_texture_refs_per_vfx": 64,
+    "max_preview_cache_mb": 2048
+  },
+  "vfx_type_rules": {
+    "ParticleSystem": {
+      "category": "配置/ParticleSystem",
+      "kind": "particle_system_config",
+      "preview_mode": "config_card"
+    },
+    "ParticleSystemRenderer": {
+      "category": "配置/ParticleSystemRenderer",
+      "kind": "renderer_config",
+      "preview_mode": "config_card"
+    },
+    "TrailRenderer": {
+      "category": "配置/TrailRenderer",
+      "kind": "trail_renderer_config",
+      "preview_mode": "config_card"
+    },
+    "LineRenderer": {
+      "category": "配置/LineRenderer",
+      "kind": "line_renderer_config",
+      "preview_mode": "config_card"
+    },
+    "Material": {
+      "category": "配置/Material",
+      "kind": "material",
+      "preview_mode": "config_card",
+      "requires_keyword": true
+    },
+    "Mesh": {
+      "category": "配置/Mesh",
+      "kind": "mesh",
+      "preview_mode": "mesh_preview",
+      "requires_keyword": true
+    },
+    "AnimationClip": {
+      "category": "配置/AnimationClip",
+      "kind": "animation",
+      "preview_mode": "config_card",
+      "requires_keyword": true
+    },
+    "Texture2D": {
+      "category": "粒子贴图",
+      "kind": "texture",
+      "preview_mode": "texture_sheet",
+      "requires_keyword": true
+    },
+    "Sprite": {
+      "category": "粒子贴图",
+      "kind": "texture",
+      "preview_mode": "texture_sheet",
+      "requires_keyword": true
+    }
+  }
+}

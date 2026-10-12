@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "image_extensions": [".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp", ".tga"],
+  "audio_extensions": [".wav", ".ogg"],
+  "font_extensions": [".ttf", ".otf", ".ttc", ".fnt"],
+  "script_extensions": [".gd"],
+  "default_image_destination": "图片/其他",
+  "image_rules": [
+    {
+      "id": "particle_texture",
+      "destination": "特效/粒子贴图",
+      "patterns": [
+        "(^|/)(vfx|fx|effects?|particles?)(/|$)",
+        "(^|[_./-])(particle|spark|smoke|flame|fire|glow|trail|impact)([_./-]|$)"
+      ]
+    },
+    {
+      "id": "atlas_or_spritesheet",
+      "destination": "图片/图集",
+      "patterns": [
+        "(^|/)(atlas|atlases|spritesheets?|texturepages?)(/|$)",
+        "(^|[_./-])(atlas|spritesheet|sprite_sheet|strip[0-9]*)([_./-]|$)"
+      ]
+    },
+    {
+      "id": "ui",
+      "destination": "图片/UI",
+      "patterns": [
+        "(^|/)(ui|gui|hud|menus?|icons?|buttons?)(/|$)",
+        "(^|[_./-])(ui|hud|menu|button|icon|cursor|panel|dialog|logo)([_./-]|$)"
+      ]
+    },
+    {
+      "id": "scene",
+      "destination": "图片/场景",
+      "patterns": [
+        "(^|/)(backgrounds?|scenes?|levels?|maps?|tilemaps?|tilesets?|environment)(/|$)",
+        "(^|[_./-])(background|parallax|level|map|tilemap|tileset|terrain|environment)([_./-]|$)"
+      ]
+    },
+    {
+      "id": "prop",
+      "destination": "图片/道具",
+      "patterns": [
+        "(^|/)(items?|props?|weapons?|equipment|pickups?)(/|$)",
+        "(^|[_./-])(item|prop|weapon|sword|gun|key|pickup|collectible)([_./-]|$)"
+      ]
+    },
+    {
+      "id": "sequence_frame",
+      "destination": "图片/序列帧",
+      "patterns": [
+        "(^|/)(frames?|sequences?|animations?)/[^/]+/",
+        "(^|/)(frames?|sequences?)/"
+      ]
+    }
+  ]
+}

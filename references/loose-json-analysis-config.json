@@ -1,0 +1,262 @@
+{
+  "schema_version": "1.0",
+  "scan": {
+    "relative_roots": [
+      "."
+    ],
+    "extension": ".json"
+  },
+  "expected": {
+    "file_count": null,
+    "total_bytes": null
+  },
+  "decoding_order": [
+    "utf-8-bom",
+    "utf-8",
+    "gb18030"
+  ],
+  "naming": {
+    "pattern": "^d_(?P<module>[^.]+)\\.py\\.(?P<table>[^.]+)\\.json$",
+    "module_group": "module",
+    "table_group": "table",
+    "ignore_case": true,
+    "unmatched_module": ""
+  },
+  "limits": {
+    "sample_key_count": 20,
+    "sample_key_characters": 500,
+    "error_characters": 300,
+    "largest_table_count": 30,
+    "module_top_count": 30,
+    "sensitive_field_top_count": 30,
+    "system_example_count": 5,
+    "matched_keyword_top_count": 20
+  },
+  "record_count_buckets": [
+    {
+      "min": 0,
+      "max": 0,
+      "label": "0"
+    },
+    {
+      "min": 1,
+      "max": 1,
+      "label": "1"
+    },
+    {
+      "min": 2,
+      "max": 9,
+      "label": "2-9"
+    },
+    {
+      "min": 10,
+      "max": 99,
+      "label": "10-99"
+    },
+    {
+      "min": 100,
+      "max": 999,
+      "label": "100-999"
+    },
+    {
+      "min": 1000,
+      "max": 9999,
+      "label": "1000-9999"
+    },
+    {
+      "min": 10000,
+      "max": null,
+      "label": ">=10000"
+    }
+  ],
+  "sampling": {
+    "sha256_sample_size": 20,
+    "sha256_seed": "game-analysis-loose-json-v1"
+  },
+  "outputs": {
+    "inventory_csv": "json-data-inventory.csv",
+    "summary_json": "summary.json",
+    "analysis_markdown": "analysis.md"
+  },
+  "system_candidates": {
+    "AI/行为": [
+      "ai",
+      "behavior",
+      "behaviour",
+      "strategy",
+      "behaviortree",
+      "行为",
+      "策略"
+    ],
+    "NPC/角色": [
+      "npc",
+      "role",
+      "character",
+      "actor",
+      "avatar",
+      "relation",
+      "人物",
+      "角色",
+      "关系",
+      "好感"
+    ],
+    "战斗/技能": [
+      "battle",
+      "combat",
+      "fight",
+      "skill",
+      "buff",
+      "debuff",
+      "damage",
+      "attack",
+      "defense",
+      "战斗",
+      "技能",
+      "伤害",
+      "攻击",
+      "防御"
+    ],
+    "任务/叙事": [
+      "quest",
+      "task",
+      "mission",
+      "story",
+      "plot",
+      "dialog",
+      "dialogue",
+      "event",
+      "trigger",
+      "任务",
+      "剧情",
+      "对话",
+      "事件",
+      "触发"
+    ],
+    "经济/物品": [
+      "item",
+      "goods",
+      "shop",
+      "price",
+      "money",
+      "coin",
+      "drop",
+      "loot",
+      "reward",
+      "warehouse",
+      "economy",
+      "物品",
+      "商店",
+      "价格",
+      "货币",
+      "掉落",
+      "奖励",
+      "仓库"
+    ],
+    "制造/装备": [
+      "craft",
+      "alchemy",
+      "forge",
+      "refine",
+      "recipe",
+      "weapon",
+      "equipment",
+      "equip",
+      "artifact",
+      "制造",
+      "合成",
+      "炼丹",
+      "锻造",
+      "装备",
+      "武器",
+      "法宝"
+    ],
+    "地图/探索": [
+      "map",
+      "scene",
+      "area",
+      "place",
+      "world",
+      "position",
+      "coordinate",
+      "teleport",
+      "地图",
+      "场景",
+      "区域",
+      "世界",
+      "坐标",
+      "传送"
+    ],
+    "组织/势力": [
+      "faction",
+      "guild",
+      "clan",
+      "sect",
+      "school",
+      "组织",
+      "门派",
+      "宗门",
+      "势力",
+      "帮派"
+    ],
+    "成长/进度": [
+      "progress",
+      "level",
+      "experience",
+      "exp",
+      "realm",
+      "breakthrough",
+      "成长",
+      "等级",
+      "经验",
+      "境界",
+      "突破"
+    ],
+    "时间/日程": [
+      "time",
+      "date",
+      "calendar",
+      "schedule",
+      "day",
+      "year",
+      "month",
+      "时间",
+      "日程",
+      "日期",
+      "年份",
+      "月份"
+    ],
+    "UI/文本/本地化": [
+      "ui",
+      "text",
+      "string",
+      "localization",
+      "locale",
+      "lang",
+      "language",
+      "tips",
+      "description",
+      "desc",
+      "界面",
+      "文本",
+      "语言",
+      "描述",
+      "提示"
+    ]
+  },
+  "privacy": {
+    "sensitive_field_name_patterns": [
+      {
+        "target": "normalized",
+        "pattern": "(?:^|_)(?:email|e_mail|phone|mobile|address|idcard|identity|realname|username|account|password|passwd|token|openid|deviceid|imei|mac)(?:$|_)"
+      },
+      {
+        "target": "normalized",
+        "pattern": "(?:idcard|realname|username|openid|deviceid)"
+      },
+      {
+        "target": "raw",
+        "pattern": "(?:邮箱|手机|电话|地址|身份证|实名|用户名|账号|密码|令牌|设备号)"
+      }
+    ]
+  }
+}

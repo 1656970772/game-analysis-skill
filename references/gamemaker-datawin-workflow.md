@@ -1,4 +1,4 @@
-﻿# GameMaker `data.win` 本地学习流程
+# GameMaker `data.win` 本地学习流程
 
 ## 适用边界
 
@@ -23,17 +23,21 @@
       序列帧/
     音频/
   2.报告/
-    全量图片画廊.html
-    <游戏名>_素材浏览器.exe
-    交付摘要.md
-    整体美术素材分析文档.md
-    场景美术分析.md
-    角色美术分析.md
-    主角美术分析.md
+    打开图片画廊.bat
+    00_研究总览.md
+    01_美术资源规格表.md
+    02_美术风格与色彩速查.md
+    03_动画与手感帧数据.md
+    04_场景关卡搭建.md
+    05_技术架构拆解.md
+    06_玩法系统拆解.md
+    07_渲染管线拆解.md
+    08_命名规范汇总.md
+    09_可迁移技术清单.md
   3.代码/
-    代码导出说明.md
+    脚本/
   4.临时目录/
-    _ascii_work/               # UTMT 暂存，避免中文路径和 stdin 编码问题
+    _ascii_work/               # 仅当完整绝对路径为 ASCII-compatible 时使用
       GameMaker_UTMT_Exports/
         EmbeddedTextures/
         Sprites/
@@ -47,9 +51,19 @@
         gamemaker_audio_index.csv
         gamemaker_summary.json
     中间索引/
+      图片画廊/
+        manifest.json
+        errors.jsonl
+        thumbnails/
       GameMaker组织/
         主角动画序列帧索引.csv
 ```
+
+## Windows 路径兼容性
+
+空格不等于非 ASCII。`game-root`、`study-root` 或工具目录的完整绝对路径全为 ASCII 时，即使含空格也直接传参；使用真实绝对路径、参数数组或正确引号保持参数边界，不需要改写路径。
+
+下文 `<gm-work-root>` 表示 UTMT 的兼容工作目录：若 `<project-root>\4.临时目录\_ascii_work` 的完整绝对路径为 ASCII-compatible，就直接使用它；否则只能使用主 agent 明确配置的、位于现有卷上的普通目录 `<compat-root>`，并派生 `<compat-root>/<owner-id>/<task-id>/gamemaker`。`owner-id` 必须对一次分析运行唯一并由主 agent 在建图时统一下发；`task-id` 在该运行内唯一，子 agent 不得自选或改写这些标识，确保并行写入无冲突。不得创建、删除或复用 `SUBST`、`New-PSDrive`、`DefineDosDevice`、`net use` 等虚拟盘符绕过。没有合格兼容根或标识时状态为 `BLOCKED`，按 fail closed 停止 UTMT 步骤。兼容目录中的正式结果必须回填到 `0.原始导出` 至 `4.临时目录` 的对应位置，不能作为第六个交付目录。
 
 ## 执行步骤
 
@@ -66,12 +80,12 @@ python <skill>\scripts\asset_inventory.py "<game-root>" --format json
 <skill>\tools\UTMT_CLI_v0.9.0.0-Windows\UndertaleModCli.exe info "<game-root>\data.win" --verbose
 ```
 
-3. 用封装脚本执行本地导出。`StudyRoot` 必须是 ASCII-only 路径，因为 UTMT CLI 的交互提示在部分 Windows 控制台中会把中文路径或 PowerShell BOM 误读成无效路径。
+3. 用封装脚本执行本地导出。`StudyRoot` 传 `<gm-work-root>`；它的完整绝对路径必须为 ASCII-compatible，因为 UTMT CLI 的交互提示在部分 Windows 控制台中会把非 ASCII 路径或 PowerShell BOM 误读成无效路径。路径中的空格允许保留。
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File <skill>\scripts\export_gamemaker_datawin_utmt.ps1 `
   -GameRoot "<game-root>" `
-  -StudyRoot "<project-root>\4.临时目录\_ascii_work" `
+  -StudyRoot "<gm-work-root>" `
   -SkillRoot "<skill>"
 ```
 
@@ -81,8 +95,8 @@ powershell -ExecutionPolicy Bypass -File <skill>\scripts\export_gamemaker_datawi
 
 ```powershell
 python <skill>\scripts\normalize_gamemaker_exports.py `
-  --exports-root "<project-root>\4.临时目录\_ascii_work\GameMaker_UTMT_Exports" `
-  --output-dir "<project-root>\4.临时目录\_ascii_work\Normalized" `
+  --exports-root "<gm-work-root>\GameMaker_UTMT_Exports" `
+  --output-dir "<gm-work-root>\Normalized" `
   --title "<游戏名> GameMaker Art Study"
 ```
 
@@ -93,34 +107,26 @@ python <skill>\scripts\normalize_gamemaker_exports.py `
 ```powershell
 python <skill>\scripts\organize_gamemaker_project_export.py `
   --project-root "<project-root>" `
-  --exports-root "<project-root>\4.临时目录\_ascii_work\GameMaker_UTMT_Exports" `
-  --normalized-root "<project-root>\4.临时目录\_ascii_work\Normalized" `
+  --exports-root "<gm-work-root>\GameMaker_UTMT_Exports" `
+  --normalized-root "<gm-work-root>\Normalized" `
   --game-name "<游戏名>" `
-  --datawin-info "<project-root>\4.临时目录\_ascii_work\gamemaker_datawin_info.txt"
+  --datawin-info "<gm-work-root>\gamemaker_datawin_info.txt"
 ```
 
-6. 生成全量图片画廊：
+6. 生成图片画廊 manifest 与 BAT：
 
 ```powershell
-python <skill>\scripts\build_full_image_gallery.py `
-  --project-root "<project-root>\4.临时目录\_ascii_work\GameMaker_UTMT_Exports" `
-  --image-index "<project-root>\4.临时目录\_ascii_work\Normalized\gamemaker_image_index.csv" `
-  --gallery-file "<project-root>\2.报告\全量图片画廊.html" `
-  --manifest "<project-root>\4.临时目录\中间索引\全量图片画廊_manifest.json" `
-  --original-prefix "../4.临时目录/_ascii_work/GameMaker_UTMT_Exports/" `
-  --title "<游戏名> GameMaker 全量图片资源画廊"
+python <skill>\scripts\build_image_gallery_manifest.py `
+  --study-root "<project-root>" `
+  --image-root "<gm-work-root>\GameMaker_UTMT_Exports" `
+  --title "<游戏名> GameMaker 图片画廊"
+
+python <skill>\scripts\create_image_gallery_launcher.py `
+  --study-root "<project-root>" `
+  --skill-root "<skill>"
 ```
 
-7. 打包本地 EXE：
-
-```powershell
-powershell -ExecutionPolicy Bypass -File <skill>\scripts\build_gallery_exe.ps1 `
-  -StudyRoot "<project-root>" `
-  -SkillRoot "<skill>" `
-  -OutputExeName "<游戏名>_素材浏览器.exe"
-```
-
-Electron 模板会查找 `2.报告/全量图片画廊.html` 与 `4.临时目录/_ascii_work/GameMaker_UTMT_Exports/`，右键只打开系统文件管理器定位本机素材，不执行脚本、不联网、不提升权限。
+固定 Electron 客户端会读取 `4.临时目录/中间索引/图片画廊/manifest.json`，并校验 BAT/CLI 传入的重复 `--images-root` 与 manifest `source_roots` 完全一致；点击卡片打开预览覆盖层，鼠标滚轮缩放图片，按住鼠标左键拖拽平移图片，预览仅通过右上角 X/关闭按钮或 Esc 关闭；`打开目录` 按钮在系统文件管理器中打开并定位当前图片，不执行脚本、不联网、不提升权限；右键不触发操作，不属于默认工作流。固定 EXE 由 Skill 目录的 `built-in-tools/GameImageGallery_1.0.0/GameImageGallery.exe` 提供，不要在每个项目内构建 EXE。旧 `build_full_image_gallery.py` 与 `build_gallery_exe.ps1` 仅作为兼容工具。
 
 ## YYC 与代码边界
 
@@ -133,8 +139,8 @@ Electron 模板会查找 `2.报告/全量图片画廊.html` 与 `4.临时目录/
 - `gamemaker_datawin_info.txt` 记录 GMS2、YYC、Sprites、Rooms、Objects、Texture Page Items、Strings、Embedded Textures 和 Audio 数量。
 - `GameMaker_UTMT_Exports` 包含 `EmbeddedTextures`、`Sprites`、`TextureItems`、`Sounds` 和 `strings.json`；若跳过声音或 strings，报告中说明。
 - `Normalized/gamemaker_summary.json` 与 CSV 索引生成成功。
-- `4.临时目录/中间索引/全量图片画廊_manifest.json` 中 `failed_count` 为 0，或报告列出失败项。
+- `4.临时目录/中间索引/图片画廊/manifest.json` 中 `summary.failed_count` 为 0，或报告列出失败项。
+- 固定图片画廊入口 `2.报告/打开图片画廊.bat` 存在且包含重复 `--images-root`；`built-in-tools/GameImageGallery_1.0.0/GameImageGallery.exe` 存在验证和 self-test 必须通过。
 - `4.临时目录/中间索引/GameMaker组织/主角动画序列帧索引.csv` 没有重复 `output_relative_path`，动作帧命名为 `action_01.png`、`action_02.png`。
-- Electron self-test 找到 `2.报告/全量图片画廊.html` 与 `4.临时目录/_ascii_work/GameMaker_UTMT_Exports`。
-- 覆盖层预览经浏览器或 Electron 自动化验证可打开；右键定位仅访问本机导出目录。
+- 固定 EXE self-test 通过；固定客户端自动化验证覆盖层预览可由点击卡片打开、滚轮缩放、左键拖拽平移，并且仅能通过右上角 X/关闭按钮或 Esc 关闭；`打开目录` 按钮可打开/定位当前图片；右键不触发操作，不属于默认工作流。
 - 最终报告分开写“观察到的事实”“我的判断”“待验证假设”，并标注本地授权路径、工具来源、不可复制元素。

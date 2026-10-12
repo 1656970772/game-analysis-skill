@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "texture_property_priority": [
+    "_MainTex",
+    "_BaseMap",
+    "_BaseColorMap",
+    "_Diffuse",
+    "_Albedo",
+    "_BaseColor"
+  ],
+  "candidate_textures": {
+    "max_per_model": 6,
+    "include_keywords": [
+      "diffuse",
+      "albedo",
+      "base",
+      "color",
+      "col",
+      "tex"
+    ],
+    "exclude_keywords": [
+      "normal",
+      "nrm",
+      "mask",
+      "noise",
+      "distort",
+      "distortion",
+      "metal",
+      "rough",
+      "ao",
+      "icon",
+      "ui"
+    ]
+  },
+  "binding_sources": {
+    "configured_property": "unity_material_configured_property",
+    "same_name_candidate": "same_name_candidate",
+    "none": "none"
+  }
+}

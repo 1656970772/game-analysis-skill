@@ -1,0 +1,119 @@
+{
+  "config_schema_version": "1.1.0",
+  "evidence_columns": {
+    "byte_size_leading_zero_policy": "forbid_except_zero",
+    "byte_size_candidates": [
+      "byte_size",
+      "object_byte_size"
+    ],
+    "byte_size_syntax": "canonical_ascii_nonnegative_decimal",
+    "byte_size_zero_allowed": true,
+    "invalid_alias_effect": "partial",
+    "raw_sha256_candidates": [
+      "raw_sha256",
+      "object_raw_sha256"
+    ],
+    "selection_policy": "first_valid_by_candidate_order",
+    "valid_alias_conflict": "fail_closed"
+  },
+  "index_columns": {
+    "asset_type": "asset_type",
+    "export_path": "export_path",
+    "remarks": "remarks",
+    "source_file": "source_file",
+    "status": "status"
+  },
+  "metadata": {
+    "generic_header_keys": [
+      "m_EditorClassIdentifier",
+      "m_Enabled",
+      "m_GameObject",
+      "m_Name",
+      "m_Script"
+    ],
+    "type_tree_key": "type_tree"
+  },
+  "limits": {
+    "unparsed_remark_preview_chars": 240,
+    "unparsed_remark_preview_limit": 100
+  },
+  "outputs": {
+    "report_markdown": "monobehaviour-boundary-analysis.md",
+    "summary_json": "monobehaviour-boundary-summary.json"
+  },
+  "patterns": {
+    "expected_actual": "^ValueError: Expected to read (?P<expected>[0-9]+) bytes, but only read (?P<actual>[0-9]+) bytes$"
+  },
+  "probe_evidence": {
+    "exact_field": "byte_consumption_exact",
+    "sample_kind_field": "sample_kind",
+    "samples_pointer": [
+      "sampling",
+      "samples"
+    ],
+    "source_field": "source_file",
+    "status_field": "status"
+  },
+  "report_language": "zh-CN",
+  "safe_fallback": [
+    {
+      "acceptance": "只有现有 metadata 中实际存在且可严格解析的字段可作为已观察事实；脚本不生成新类型树。",
+      "id": "observed_metadata"
+    },
+    {
+      "acceptance": "只有通用 MonoBehaviour 头字段时标记 generic_header_only，不把它计为自定义字段恢复。",
+      "id": "header_index"
+    },
+    {
+      "acceptance": "只有索引显式提供 raw SHA-256 时才记录 raw 身份；缺列或空值必须标 unavailable。",
+      "id": "raw_hash_only"
+    }
+  ],
+  "source_groups": {
+    "default_id": "other",
+    "rules": [
+      {
+        "id": "streaming_assets",
+        "pattern": "(?:^|/)StreamingAssets(?:/|$)"
+      },
+      {
+        "id": "player_levels",
+        "pattern": "(?:^|/)level[0-9]+$"
+      },
+      {
+        "id": "shared_assets",
+        "pattern": "(?:^|/)sharedassets[0-9]*\\.assets$"
+      },
+      {
+        "id": "resources_and_builtins",
+        "pattern": "(?:^|/)(?:resources\\.assets|unity default resources|unity_builtin_extra)$"
+      }
+    ]
+  },
+  "statuses": {
+    "exported": [
+      "exported"
+    ],
+    "known": [
+      "exported",
+      "read_error",
+      "indexed_monobehaviour_header",
+      "indexed_raw_hash_only",
+      "managed_generated_exact",
+      "embedded_exact"
+    ],
+    "read_error": [
+      "read_error"
+    ]
+  },
+  "forbidden_inference": [
+    "不得把 Expected N / read M 解释为源对象只剩 M 字节、源文件被截断或容器未读取。",
+    "不得把 exported 状态自动解释为自定义实例字段已恢复；必须检查实际 metadata schema。",
+    "不得用 check_read=False、字段声明顺序、Managed 默认值、剩余字节或 raw bytes 猜测实例字段和值。",
+    "不得把 raw size/hash 称为反序列化完成；hash 只证明被索引字节的身份。",
+    "不得把 AssetRipper layout mismatch 与 UnityPy read_error 合并成同一错误总数或同一根因。",
+    "不得把 TypeTree 生成节点数、字段名匹配或部分消费当作布局正确；语义接受必须另有 exact-consumption 证据。",
+    "不得把分层、定向或控制 probe 的成功率外推为总体恢复率、总体置信区间或验收承诺。",
+    "不得把 parser exact 与落盘字段完整性混为一谈；输出截断策略必须独立标注。"
+  ]
+}

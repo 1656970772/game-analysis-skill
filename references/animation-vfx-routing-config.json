@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "description": "Animation and VFX task routing defaults. Values are policy inputs, not project-specific constants.",
+  "metrics": {
+    "N": "candidate animation and VFX resource count",
+    "B": "total candidate bytes",
+    "G": "distinct format-signature groups",
+    "U": "unknown format-signature groups",
+    "E": "dependency graph edge count",
+    "C": "write-conflict edge count between ready tasks",
+    "R": "runtime-dependent effect groups such as custom shaders, VFX Graph, particles, or ocean simulation"
+  },
+  "thresholds": {
+    "small": {
+      "max_N": 200,
+      "max_B": 2147483648,
+      "max_G": 1,
+      "max_U": 0,
+      "max_E": 800,
+      "max_C": 0,
+      "max_R": 1
+    },
+    "mid": {
+      "max_N": 2000,
+      "max_B": 21474836480,
+      "max_G": 4,
+      "max_U": 1,
+      "max_E": 10000,
+      "max_C": 8,
+      "max_R": 4
+    },
+    "large": {
+      "when": "any metric exceeds the mid threshold"
+    }
+  },
+  "sharding": {
+    "shard_items": 1000,
+    "shard_bytes": 4294967296,
+    "preferred_boundaries": [
+      "source package or bundle",
+      "format-signature group",
+      "semantic resource family",
+      "dependency-closed component"
+    ],
+    "forbidden_boundaries": [
+      "random path range that splits a dependency closure",
+      "multiple writers targeting one final manifest or launcher",
+      "multiple adapters guessing the same unknown signature"
+    ]
+  },
+  "concurrency": {
+    "reserve_root_slots": 1,
+    "work_units_formula": "max(1, ceil(N / shard_items), ceil(B / shard_bytes), G, U, R)",
+    "child_concurrency_formula": "min(max(0, platform_slots - reserve_root_slots), ready_independent_nodes_without_write_conflicts, work_units)",
+    "dependency_rule": "only nodes whose predecessors are approved may become ready",
+    "unknown_rule": "any U greater than zero creates exactly one Adapter task per unknown format-signature group before full export of that group",
+    "write_conflict_rule": "any C greater than zero removes conflicting nodes from the same concurrent wave unless each writer uses an isolated task fragment",
+    "pipeline_rule": "Preview may consume an immutable approved export fragment while later independent Exporter shards continue, but final manifest and launcher publication wait for Merger"
+  },
+  "roles": {
+    "Discovery": {
+      "mode": "read_only",
+      "trigger": "always as a logical node; use a separate agent when U>0, G>1, dependency identity is missing, or the workload is not small",
+      "outputs": [
+        "resource-candidates.csv",
+        "dependency-graph.json",
+        "discovery-summary.json",
+        "sample-plan.json"
+      ],
+      "gate": "candidate counts, bytes, signatures, source hashes, dependency edges, ambiguity, and unknown groups reconcile"
+    },
+    "Adapter": {
+      "mode": "maker",
+      "trigger": "U>0, unsupported inputs exist, stable preview IR is missing, or runtime component coverage is incomplete",
+      "scope": "one format-signature or runtime-component group",
+      "gate": "a representative sample starts RED, then parses or reconstructs repeatably; malformed data fails closed; limitations are machine-readable; Spec approves before full export"
+    },
+    "Exporter": {
+      "mode": "maker",
+      "trigger": "an Adapter or known converter is Spec-approved",
+      "scope": "one dependency-closed shard",
+      "gate": "planned candidates equal exported plus skipped plus failed; provenance and output hashes exist; rerun is idempotent; source remains unchanged"
+    },
+    "Preview": {
+      "mode": "maker",
+      "trigger": "an immutable export fragment contains at least one preview-ready item",
+      "scope": "consume manifest data rather than rediscovering source files",
+      "gate": "playback, material inspection, media export, partial and unsupported states, and source location are represented without placeholders being marked complete"
+    },
+    "Merger": {
+      "mode": "single_writer",
+      "trigger": "all required fragments for the publication generation are closed",
+      "scope": "final manifest, errors index, preview launcher, and publication summary",
+      "gate": "fragment exact set, schema version, dependency references, generation hashes, and final paths reconcile"
+    },
+    "Spec": {
+      "mode": "reviewer_read_only",
+      "trigger": "after Discovery, Adapter, Exporter, Preview, or Merger reports DONE or DONE_WITH_CONCERNS",
+      "gate": "scope, dependency order, write ownership, exact-set counts, five-directory contract, provenance, and explicit incomplete states pass"
+    },
+    "Fixer": {
+      "mode": "maker",
+      "trigger": "a Spec or Quality review fails",
+      "gate": "a new Fixer reproduces the supplied probe as RED, applies the minimal fix, and returns target plus regression evidence for re-review"
+    },
+    "Quality": {
+      "mode": "reviewer_read_only",
+      "trigger": "only after Spec approval",
+      "gate": "representative playback, transforms, timing, transparency and blending, dependency display, exported media decoding, offline safety, and source immutability pass"
+    }
+  },
+  "write_conflicts": {
+    "single_writer_targets": [
+      "final manifest.json",
+      "final errors.jsonl",
+      "2.报告/打开动画预览.bat",
+      "final numbered reports",
+      "shared classification destinations",
+      "the same Skill source or reference file"
+    ],
+    "fragment_root_template": "4.临时目录/子任务产物/<task-id>/",
+    "fragment_requirements": [
+      "task-id is unique within the analysis run",
+      "each fragment declares candidate exact set and generation hash",
+      "fragments never publish the final launcher",
+      "Merger is the only final publisher"
+    ]
+  },
+  "engine_overrides": {
+    "klei": {
+      "conversion_single_producer": true,
+      "conversion_rule": "Klei package conversion is serial and single-producer because shared converter outputs and package indices must not be written concurrently",
+      "parallel_after_conversion": [
+        "Prefab and fx.lua semantic discovery",
+        "DYN boundary analysis",
+        "dependency-closed preview fragments"
+      ]
+    },
+    "unity": {
+      "ordering": [
+        "AssetRipper export",
+        "UnityPy export",
+        "animation and VFX discovery",
+        "adapter and dependency-closed export shards",
+        "preview fragments",
+        "Merger",
+        "Spec",
+        "Quality"
+      ]
+    },
+    "unknown": {
+      "ordering": [
+        "read-only signature discovery",
+        "one Adapter per unknown signature",
+        "sample Spec review",
+        "dependency-closed export shards",
+        "generic IR merge",
+        "preview or explicit material-only fallback",
+        "Spec",
+        "Quality"
+      ]
+    }
+  }
+}

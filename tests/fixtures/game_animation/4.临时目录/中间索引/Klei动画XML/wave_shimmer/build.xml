@@ -1,0 +1,10 @@
+<Build name="wave_shimmer_build">
+  <Texture filename="atlas-0.tex"/>
+  <Symbol name="wave"><Frame framenum="0" duration="1" alphaidx="0" alphacount="6"/></Symbol>
+  <Alphavert x="-1" y="-1" u="0" v="1" w="0"/>
+  <Alphavert x="1" y="-1" u="1" v="1" w="0"/>
+  <Alphavert x="-1" y="1" u="0" v="0" w="0"/>
+  <Alphavert x="1" y="-1" u="1" v="1" w="0"/>
+  <Alphavert x="1" y="1" u="1" v="0" w="0"/>
+  <Alphavert x="-1" y="1" u="0" v="0" w="0"/>
+</Build>

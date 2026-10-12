@@ -14,6 +14,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Iterable
 
+from build_image_gallery_manifest import build_manifest
+from create_image_gallery_launcher import create_launcher
+
 
 SKILL_ROOT = Path(__file__).resolve().parents[1]
 BUNDLE_NAME = "localRemoteRes"
@@ -358,6 +361,7 @@ def gallery_items(rows: Iterable[AssetRow], gallery_dir: Path) -> list[dict[str,
 
 
 def write_gallery(rows: list[AssetRow], gallery_dir: Path, title: str, description: str) -> None:
+    """Legacy HTML gallery writer retained for compatibility; not used by the default repair flow."""
     ensure_clean_dir(gallery_dir)
     items = gallery_items(rows, gallery_dir)
     manifest_path = gallery_dir / "gallery_manifest.json"
@@ -666,6 +670,16 @@ def write_gallery(rows: list[AssetRow], gallery_dir: Path, title: str, descripti
     (gallery_dir / "index.html").write_text(html, encoding="utf-8")
 
 
+def write_fixed_image_gallery(study_root: Path, title: str = "Cocos Creator 图片画廊") -> dict[str, str]:
+    manifest = build_manifest(study_root=study_root, skill_root=SKILL_ROOT, title=title)
+    launcher = create_launcher(study_root=study_root, skill_root=SKILL_ROOT)
+    return {
+        "manifest": str(study_root / "4.临时目录" / "中间索引" / "图片画廊" / "manifest.json"),
+        "launcher": str(launcher),
+        "items": str(manifest.get("summary", {}).get("item_count", 0)),
+    }
+
+
 def command_text(args: list[str]) -> str:
     return " ".join(f'"{arg}"' if " " in arg else arg for arg in args)
 
@@ -732,8 +746,8 @@ def write_report(rows: list[AssetRow], study_root: Path, source_root: Path, astc
         "",
         "## 输出",
         "",
-        "- 专项画廊：`2.报告/角色场景资源画廊/index.html`",
-        "- 角色候选画廊：`2.报告/主角候选资源画廊/index.html`",
+        "- 图片预览入口：`2.报告/打开图片画廊.bat`",
+        "- 图片画廊 manifest：`4.临时目录/中间索引/图片画廊/manifest.json`",
         "- 映射索引：`4.临时目录/中间索引/cocos_astc/角色场景资源映射.csv`",
         "- 角色 PNG：`1.分类资源/图片/角色资源/可预览_ASTC解码/`",
         "- 场景 PNG：`1.分类资源/图片/场景资源/可预览_ASTC解码/`",
@@ -769,7 +783,7 @@ def write_report(rows: list[AssetRow], study_root: Path, source_root: Path, astc
 
 
 def write_status_append(rows: list[AssetRow], study_root: Path) -> None:
-    status_path = study_root / "2.报告" / "验证日志.md"
+    status_path = study_root / "4.临时目录" / "工具日志" / "验证日志.md"
     decoded = sum(1 for row in rows if row.decode_status in {"decoded", "cached"} and row.decoded_path and row.decoded_path.exists())
     block = f"""
 
@@ -777,9 +791,9 @@ def write_status_append(rows: list[AssetRow], study_root: Path) -> None:
 
 - 已按 `localRemoteRes/cc.config.json` 修复 Cocos UUID 到 ASTC 原始纹理的映射。
 - 已生成角色/场景 ASTC 解码 PNG：{decoded} 张。
-- 新增专项入口：`2.报告/角色场景资源画廊/index.html`。
-- 新增角色候选入口：`2.报告/主角候选资源画廊/index.html`。
-- 说明：之前“只有奇怪图标”的原因是旧画廊只收集 PNG/JPG/WEBP，未把语义路径下的 `.astc` 大图解码进角色/场景画廊。
+- 新增图片预览入口：`2.报告/打开图片画廊.bat`。
+- 新增图片画廊 manifest：`4.临时目录/中间索引/图片画廊/manifest.json`。
+- 说明：之前“只有奇怪图标”的原因是旧流程未把语义路径下的 `.astc` 大图解码进统一图片画廊。
 """
     if status_path.exists():
         existing = status_path.read_text(encoding="utf-8")
@@ -821,18 +835,7 @@ def main() -> int:
         copy_role_candidates(rows, study_root, force=args.force)
 
     write_indexes(rows, study_root, source_root)
-    write_gallery(
-        rows,
-        study_root / "2.报告" / "角色场景资源画廊",
-        "角色场景资源画廊",
-        "从 localRemoteRes 的 Cocos 语义路径映射到 ASTC 原始纹理后生成。",
-    )
-    write_gallery(
-        [row for row in rows if is_role_candidate(row)],
-        study_root / "2.报告" / "主角候选资源画廊",
-        "主角候选资源画廊",
-        "按角色展示、排行立绘、好友人物图和同人角色筛选出的候选图。",
-    )
+    gallery_summary = write_fixed_image_gallery(study_root, "Cocos Creator 图片画廊")
     write_tool_record(study_root, astcenc)
     write_report(rows, study_root, source_root, astcenc)
     write_status_append(rows, study_root)
@@ -843,6 +846,8 @@ def main() -> int:
         "failed": sum(1 for row in rows if row.decode_status == "failed"),
         "missing_native": sum(1 for row in rows if row.decode_status == "missing_native"),
         "astcenc": str(astcenc) if astcenc else "",
+        "gallery_manifest": gallery_summary["manifest"],
+        "gallery_launcher": gallery_summary["launcher"],
     }
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     return 0 if summary["failed"] == 0 else 1

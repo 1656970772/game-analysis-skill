@@ -1,0 +1,7 @@
+<Anims>
+  <anim name="shimmer_loop" root="wave_shimmer" framerate="15" numframes="1">
+    <frame w="4" h="4" x="0" y="0">
+      <element name="wave" layername="water" frame="0" z_index="0" m_a="1" m_b="0" m_c="0" m_d="1" m_tx="0" m_ty="0"/>
+    </frame>
+  </anim>
+</Anims>

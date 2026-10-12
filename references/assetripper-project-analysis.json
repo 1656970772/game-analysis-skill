@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "build_settings": {
+    "record_start_key": "enabled",
+    "path_key": "path",
+    "guid_key": "guid"
+  },
+  "render_settings": {
+    "graphics_file": "ProjectSettings/GraphicsSettings.asset",
+    "quality_file": "ProjectSettings/QualitySettings.asset",
+    "player_file": "ProjectSettings/ProjectSettings.asset",
+    "packages_file": "Packages/manifest.json",
+    "custom_render_pipeline_key": "m_CustomRenderPipeline",
+    "quality_levels_section_key": "m_QualitySettings",
+    "quality_level_record_start_key": "serializedVersion",
+    "quality_platform_defaults_section_key": "m_PerPlatformDefaultQuality",
+    "srp_package_prefixes": [
+      "com.unity.render-pipelines."
+    ]
+  },
+  "layout_mismatch": {
+    "total_json_pointers": [
+      "/runtime_log/layout_mismatch_count",
+      "/layout_mismatch_count",
+      "/summary/layout_mismatch_count"
+    ],
+    "entries_json_pointers": [
+      "/runtime_log/selected_layout_mismatches",
+      "/runtime_log/layout_mismatches",
+      "/layout_mismatches",
+      "/affected_components"
+    ],
+    "name_fields": [
+      "type",
+      "component",
+      "name",
+      "class_name"
+    ],
+    "count_fields": [
+      "count",
+      "error_count",
+      "occurrences"
+    ],
+    "guid_fields": [
+      "guid",
+      "script_guid"
+    ],
+    "safe_usage": [
+      "只安全使用通用 MonoBehaviour 壳、脚本 GUID 引用及未受影响的 Unity 内建 YAML 组件事实。"
+    ],
+    "forbidden_inference": [
+      "不得从发生 layout mismatch 的空白、截断或错位 YAML 块推断自定义序列化字段。"
+    ]
+  }
+}

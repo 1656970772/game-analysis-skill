@@ -22,6 +22,22 @@ RENDER_EXTENSIONS = {".shader", ".mat", ".rendertexture"}
 ANIMATION_EXTENSIONS = {".anim", ".controller", ".overridecontroller", ".playable"}
 
 
+def find_export_roots(study_root: Path, prefix: str) -> list[Path]:
+    export_root = study_root / "0.原始导出"
+    if not export_root.exists():
+        return []
+    candidates = sorted(
+        path
+        for path in export_root.iterdir()
+        if path.is_dir() and (path.name == prefix or path.name.startswith(f"{prefix}_"))
+    )
+    decoded = [path for path in candidates if "GameFramework解密资源" in path.name]
+    if decoded:
+        return decoded
+    exact = [path for path in candidates if path.name == prefix]
+    return exact or candidates
+
+
 def read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(encoding="utf-8-sig", newline="") as fh:
         return list(csv.DictReader(fh))
@@ -36,8 +52,18 @@ def write_csv(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None
 
 
 def find_unitypy_indexes(study_root: Path) -> list[Path]:
-    candidates = sorted((study_root / "0.原始导出" / "UnityPy").rglob("all_resources_index.csv"))
+    candidates = sorted(
+        path
+        for root in find_export_roots(study_root, "UnityPy")
+        for path in root.rglob("all_resources_index.csv")
+    )
     if candidates:
+        primary_candidates = [path for path in candidates if "音频样本" not in str(path)]
+        dlc_candidates = [path for path in primary_candidates if "含DLC" in str(path)]
+        if dlc_candidates:
+            return dlc_candidates
+        if primary_candidates:
+            return primary_candidates
         return candidates
     fallback = study_root / "4.临时目录" / "中间索引" / "UnityPy组织" / "资源组织索引.csv"
     return [fallback] if fallback.exists() else []
@@ -191,10 +217,10 @@ def build_indices(study_root: Path) -> dict[str, Any]:
     audio_rows = rows_for_types(unitypy_rows, {"AudioClip"})
     animation_rows = rows_for_types(unitypy_rows, ANIMATION_TYPES)
 
-    assetripper_root = study_root / "0.原始导出" / "AssetRipper"
-    render_rows.extend(file_index_rows(assetripper_root, RENDER_EXTENSIONS, "RenderFile"))
-    audio_rows.extend(file_index_rows(assetripper_root, AUDIO_EXTENSIONS, "AudioFile"))
-    animation_rows.extend(file_index_rows(assetripper_root, ANIMATION_EXTENSIONS, "AnimationFile"))
+    for assetripper_root in find_export_roots(study_root, "AssetRipper"):
+        render_rows.extend(file_index_rows(assetripper_root, RENDER_EXTENSIONS, "RenderFile"))
+        audio_rows.extend(file_index_rows(assetripper_root, AUDIO_EXTENSIONS, "AudioFile"))
+        animation_rows.extend(file_index_rows(assetripper_root, ANIMATION_EXTENSIONS, "AnimationFile"))
 
     ns_rows = namespace_rows(study_root / "3.代码" / "IL导出")
 

@@ -23,8 +23,24 @@ if ([string]::IsNullOrWhiteSpace($SkillRoot)) {
 
 function Assert-AsciiPath([string]$PathValue, [string]$Name) {
   if ($PathValue.ToCharArray() | Where-Object { [int][char]$_ -gt 127 } | Select-Object -First 1) {
-    throw "$Name must be ASCII-only for UndertaleModCli scripted prompts. Use an ASCII study path such as F:\MyTools\KatanaZERO_ArtStudy."
+    throw "$Name must be ASCII-compatible for UndertaleModCli scripted prompts. Spaces are allowed. Use a real absolute path on an existing volume. Virtual drive aliases are forbidden."
   }
+}
+
+function Assert-StudyRootPathCompatibility([string]$PathValue) {
+  $isRooted = -not [string]::IsNullOrWhiteSpace($PathValue) -and [System.IO.Path]::IsPathRooted($PathValue)
+  $isDriveAbsolute = $PathValue -match '^[A-Za-z]:[\\/]'
+  $isUncAbsolute = $PathValue -match '^[\\/]{2}[^\\/]+[\\/][^\\/]+(?:[\\/]|$)'
+  if (-not $isRooted -or (-not $isDriveAbsolute -and -not $isUncAbsolute)) {
+    throw "StudyRoot must be a real absolute path on an existing volume. Spaces are allowed. Virtual drive aliases are forbidden."
+  }
+
+  $pathRoot = [System.IO.Path]::GetPathRoot($PathValue)
+  if ([string]::IsNullOrWhiteSpace($pathRoot) -or -not (Test-Path -LiteralPath $pathRoot -PathType Container)) {
+    throw "StudyRoot must be a real absolute path on an existing volume. Spaces are allowed. Virtual drive aliases are forbidden."
+  }
+
+  Assert-AsciiPath -PathValue $PathValue -Name "StudyRoot"
 }
 
 function Write-AsciiInput([string]$Path, [string[]]$Lines) {
@@ -39,8 +55,9 @@ function Invoke-UtmtScript([string]$ScriptPath, [string[]]$PromptLines, [string]
 }
 
 $resolvedGameRoot = (Resolve-Path -LiteralPath $GameRoot).Path
-$resolvedStudyRoot = (Resolve-Path -LiteralPath (New-Item -ItemType Directory -Force -Path $StudyRoot)).Path
-Assert-AsciiPath -PathValue $resolvedStudyRoot -Name "StudyRoot"
+Assert-StudyRootPathCompatibility -PathValue $StudyRoot
+$studyRootItem = New-Item -ItemType Directory -Force -Path $StudyRoot
+$resolvedStudyRoot = (Resolve-Path -LiteralPath $studyRootItem).Path
 
 $script:DataWin = Join-Path $resolvedGameRoot "data.win"
 if (-not (Test-Path -LiteralPath $script:DataWin)) {

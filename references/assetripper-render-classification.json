@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "source_assets": "0.原始导出/AssetRipper/ExportedProject/Assets",
+  "classified_root": "1.分类资源/渲染",
+  "index_root": "4.临时目录/中间索引/渲染分类",
+  "transfer_methods": [
+    "hardlink",
+    "copy"
+  ],
+  "categories": [
+    {
+      "name": "Material",
+      "extensions": [
+        ".mat"
+      ]
+    },
+    {
+      "name": "Shader",
+      "extensions": [
+        ".shader"
+      ]
+    },
+    {
+      "name": "RenderTexture",
+      "extensions": [
+        ".rendertexture"
+      ]
+    }
+  ]
+}

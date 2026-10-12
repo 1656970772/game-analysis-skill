@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "discovery": {
+    "manifest_bundle_extension": ".bundle",
+    "recognized_magic": [
+      "UnityFS",
+      "UnityWeb",
+      "UnityRaw"
+    ],
+    "recoverable_magic": [
+      "UnityFS"
+    ],
+    "max_magic_offset_bytes": 1048576,
+    "minimum_zero_prefix_bytes": 1
+  },
+  "unityfs_header": {
+    "allowed_format_versions": [
+      6,
+      7,
+      8
+    ],
+    "max_version_string_bytes": 256,
+    "require_nonempty_unity_version": true,
+    "require_nonempty_generator_version": true,
+    "require_declared_size_equals_embedded_length": true,
+    "require_positive_blocks_info_sizes": true
+  },
+  "safety": {
+    "blocked_path_regexes": [
+      "(?i)(?:^|[/_. -])(?:drm|anti[-_ ]?cheat|easyanticheat|battleye|denuvo|access[-_ ]?control)(?:$|[/_. -])"
+    ],
+    "reject_reparse_points": true,
+    "reject_input_output_overlap": true,
+    "require_fresh_output_root": true,
+    "copy_chunk_bytes": 8388608
+  },
+  "outputs": {
+    "entry_csv": "offset-recovery-files.csv",
+    "summary_json": "offset-recovery-summary.json"
+  },
+  "validation": {
+    "fail_on_blocked_entry": true,
+    "fail_on_source_change": true,
+    "fail_on_partial_files": true
+  }
+}

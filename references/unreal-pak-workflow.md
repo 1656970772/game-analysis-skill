@@ -22,6 +22,12 @@
   4.临时目录/
 ```
 
+## Windows 路径兼容性
+
+空格不等于非 ASCII。完整绝对路径全为 ASCII 时，即使包含空格也应使用真实绝对路径直接传参，并通过参数数组或正确引号保持参数边界；不要为了空格创建路径别名。`repak` 能直接处理的路径优先保持原样。
+
+只有 UModel 等已验证不支持非 ASCII 路径的工具才能使用兼容根。该根必须由主 agent 明确配置为现有卷上的普通目录 `<compat-root>`；主 agent 为每次分析生成一次分析运行唯一的 `owner-id` 并统一下发，子 agent 不得自选或改写兼容根、`owner-id`。每个 `task-id` 在所属 `owner-id` 下唯一，每个 `slice-id` 在所属任务内唯一；并行任务只写 `<compat-root>/<owner-id>/<task-id>/<slice-id>` 下自己的目录，保证写入范围无冲突。不得创建、删除或复用 `SUBST`、`New-PSDrive`、`DefineDosDevice`、`net use` 等虚拟盘符。没有合格兼容根或标识时回报 `BLOCKED`，按 fail closed 停止 UModel 步骤；完成后把正式产物和日志回填到 study-root 的 5 个编号目录。
+
 ## 基础命令
 
 ```powershell
@@ -29,12 +35,14 @@ $skill = Join-Path $env:USERPROFILE ".codex\skills\GameAnalysis"
 $repak = "$skill\tools\repak_0.2.3\repak.exe"
 $pak = "<game-root>\<Project>\Content\Paks\<Project>-WindowsNoEditor.pak"
 $study = "<study-root>"
+$indexOut = Join-Path $study "4.临时目录\UnrealPakIndex"
+New-Item -ItemType Directory -Force -Path $indexOut | Out-Null
 
-& $repak info $pak | Out-File -Encoding utf8 "$study\4.临时目录\_ascii_work\pak.info.txt"
-& $repak list $pak | Out-File -Encoding utf8 "$study\4.临时目录\_ascii_work\pak.list.txt"
-& $repak get $pak "<Project>/<Project>.uproject" | Out-File -Encoding utf8 "$study\4.临时目录\_ascii_work\<Project>.uproject.txt"
-& $repak get $pak "<Project>/Config/DefaultEngine.ini" | Out-File -Encoding utf8 "$study\4.临时目录\_ascii_work\DefaultEngine.ini"
-& $repak get $pak "<Project>/Config/DefaultGame.ini" | Out-File -Encoding utf8 "$study\4.临时目录\_ascii_work\DefaultGame.ini"
+& $repak info $pak | Out-File -Encoding utf8 (Join-Path $indexOut "pak.info.txt")
+& $repak list $pak | Out-File -Encoding utf8 (Join-Path $indexOut "pak.list.txt")
+& $repak get $pak "<Project>/<Project>.uproject" | Out-File -Encoding utf8 (Join-Path $indexOut "project.uproject.txt")
+& $repak get $pak "<Project>/Config/DefaultEngine.ini" | Out-File -Encoding utf8 (Join-Path $indexOut "DefaultEngine.ini")
+& $repak get $pak "<Project>/Config/DefaultGame.ini" | Out-File -Encoding utf8 (Join-Path $indexOut "DefaultGame.ini")
 ```
 
 若 `repak info` 显示 `encrypted index: true`，停止自动化清单流程并记录需要用户提供合法 AES key；不要寻找或下载密钥。
@@ -78,12 +86,12 @@ $umodel = "$skill\tools\UEViewer_umodel\umodel_64.exe"
 对 `repak info` 显示 `version: V11`、`version major: Fnv64BugFix` 的 UE4 包，可先试 `'-game=ue4.25+'`。在 PowerShell 中必须把 `-game=ue4.25+` 整个参数加引号，否则 UModel 可能把它解析成未知的 `ue4` 标签。
 
 ```powershell
-$out = "<study-root>\4.临时目录\_ascii_work\umodel_sample_export"
+$out = "<compat-root>\<owner-id>\<task-id>\<slice-id>\sample\umodel_sample_export"
 & $umodel -pkginfo '-game=ue4.25+' "-path=<game-root>" "JH/JHNeoUI/UIAssets/Alchemy/Alchemy00_BG"
 & $umodel -export '-game=ue4.25+' -png "-out=$out" "-path=<game-root>" "JH/JHNeoUI/UIAssets/Alchemy/Alchemy00_BG"
 ```
 
-UModel 是较老的 Windows 工具，输出目录使用 ASCII-only 路径；中文目录可能在日志和实际输出路径中出现乱码。
+UModel 是较老的 Windows 工具，只有输出目录的完整绝对路径全为 ASCII 时才是 ASCII-compatible；仅把子目录命名为 `_ascii_work` 并不能解决父路径含非 ASCII 的问题。中文目录可能在日志和实际输出路径中出现乱码，含空格的全 ASCII 路径则可按上述参数边界直接传入。
 
 只有在用户明确要求素材级本机学习导出、目标包不加密、且工具能稳定读取时，才对少量已确认候选做导出验证。导出的原始素材只能留在本机学习目录，最终报告转译为抽象原则。
 
@@ -93,7 +101,7 @@ UModel 是较老的 Windows 工具，输出目录使用 ASCII-only 路径；中�
 
 全量转换前必须先做小样本版本验证：至少选择一个纹理包和一个 StaticMesh/SkeletalMesh 候选，依次尝试 `-game=ue4.25+`、`-game=ue4.26`、`-game=ue4.27` 或检测到的具体版本，并把成功/失败命令写入 `4.临时目录/工具验证记录/`。有些项目会出现“纹理能用一个标签导出、模型必须换另一个标签”的情况；不要只凭纹理样本就开始长任务。PowerShell 中包含 `+` 的参数保持整串传入，例如 `'-game=ue4.25+'`。
 
-若 UModel 对 `JH/.../*` 这类限定通配符扫描失败，但对 `*` 可以在受限 `-path` 下工作，使用 ASCII-only 暂存根和 Windows junction 分片：把每个候选目录按原始相对路径链接到 `4.临时目录/_ascii_work/umodel-slices/inputs/<slice-id>/`，再用 `-path=<slice-input-root> *` 导出。这样既避免全包扫描过大，也能保留原始目录和资源名。不要在 `.ps1` 里硬编码中文路径；脚本用参数、`$PSScriptRoot` 或自动发现路径，避免 Windows PowerShell 5.1 把非 UTF-8 脚本内容解析成乱码。
+若 UModel 对 `JH/.../*` 这类限定通配符扫描失败，但对 `*` 可以在受限 `-path` 下工作，使用主 agent 配置的共享普通兼容根和 Windows junction 分片：把每个候选目录按原始相对路径链接到 `<compat-root>/<owner-id>/<task-id>/<slice-id>/inputs/`，再用 `-path=<slice-input-root> *` 导出。junction 只能位于这个既有卷普通目录下，不能换成虚拟盘符；这样既避免全包扫描过大，也能保留原始目录和资源名。不要在 `.ps1` 里硬编码中文路径；脚本用参数、`$PSScriptRoot` 或自动发现路径，避免 Windows PowerShell 5.1 把非 UTF-8 脚本内容解析成乱码。
 
 推荐使用 `scripts/export_unreal_umodel_slices.ps1` 按 JSON manifest 分片导出。每个 slice 至少包含：
 
@@ -134,7 +142,7 @@ Blender 验证要先区分“资产缺材质”和“启动参数错误”。Win
 ## 验证
 
 - 源游戏目录没有写入或修改。
-- `<study-root>/4.临时目录/_ascii_work/pak.info.txt` 与 `pak.list.txt` 已生成。
+- `<study-root>/4.临时目录/UnrealPakIndex/pak.info.txt` 与 `pak.list.txt` 已生成。
 - 报告记录 `encrypted index`、mount point、version、compression 和 file entries。
 - 若用户明确要求全量导出，`<study-root>/0.原始导出/PakUnpacked` 已生成，并记录文件数、体积、耗时和源 `.pak` 前后哈希。
 - 若 UModel 尝试失败，记录命令、日志路径、超时和进程清理结果。

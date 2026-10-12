@@ -1,0 +1,169 @@
+{
+  "schema_version": 2,
+  "paths": {
+    "classified_root": "1.分类资源",
+    "index_root": "4.临时目录/中间索引/UnityPy组织",
+    "requirements_output": "4.临时目录/模型工具需求.md",
+    "main_candidate_subdir": "图片/角色立绘/主角候选资源"
+  },
+  "transfer_methods": [
+    "hardlink",
+    "copy"
+  ],
+  "classified_category_roots": [
+    "图片",
+    "模型",
+    "特效",
+    "音频",
+    "渲染"
+  ],
+  "metadata_extensions": [
+    ".json",
+    ".csv",
+    ".txt",
+    ".md"
+  ],
+  "image_extensions": [
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".tga",
+    ".bmp",
+    ".webp"
+  ],
+  "audio_extensions": [
+    ".wav",
+    ".ogg",
+    ".mp3",
+    ".bank"
+  ],
+  "image_asset_types": [
+    "Sprite",
+    "Texture2D"
+  ],
+  "audio_asset_types": [
+    "AudioClip"
+  ],
+  "model_related_asset_types": [
+    "Mesh",
+    "MeshRenderer",
+    "SkinnedMeshRenderer"
+  ],
+  "render_asset_types": [
+    "Shader",
+    "Material",
+    "RenderTexture"
+  ],
+  "image_classification_rules": [
+    {
+      "id": "prop",
+      "category": "图片/道具",
+      "patterns": [
+        "(^|[_./-])(item|items|prop|props|weapon|weapons|equipment|pickup|pickups|collectible|sword|gun|key|hat|mask)([_./-]|$)",
+        "(^|[_./-])(道具|物品|武器|装备)([_./-]|$)"
+      ]
+    },
+    {
+      "id": "ui",
+      "category": "图片/UI",
+      "patterns": [
+        "(^|[_./-])(ui|gui|hud|menu|button|icon|cursor|panel|dialog|logo|scroll|dropdown|inputfield|checkmark)([_./-]|$)"
+      ]
+    },
+    {
+      "id": "particle_texture",
+      "category": "特效/粒子贴图",
+      "patterns": [
+        "(^|[_./-])(vfx|fx|effect|effects|particle|particles|spark|smoke|fog|flame|fire|glow|trail|impact|slash|falloff|transition)([_./-]|$)"
+      ]
+    },
+    {
+      "id": "character_portrait",
+      "category": "图片/角色立绘",
+      "patterns": [
+        "(^|[_./-])(hero|player|protagonist|mainchar|main_character|character|characters|portrait|portraits|avatar|avatars|npc|npcs)([_./-]|$)",
+        "(^|[_./-])(主角|玩家角色|角色|立绘|头像|人物)([_./-]|$)"
+      ]
+    },
+    {
+      "id": "scene",
+      "category": "图片/场景",
+      "patterns": [
+        "(^|[_./-])(scene|scenes|background|backgrounds|bg|scenery|map|maps|environment|landscape|forest|jungle|waterfall|gate|village|garden|rooftop|tavern|foliage|door|market)([_./-]|$)",
+        "(^|[_./-])(场景|背景|地图|环境)([_./-]|$)"
+      ]
+    }
+  ],
+  "default_image_categories": {
+    "Sprite": "图片/图集",
+    "Texture2D": "图片/图集"
+  },
+  "sequence": {
+    "name_patterns": [
+      "^(?P<subject>.+?)[-_ ]+(?P<action>[^\\W\\d_][\\w-]*?)[-_ ]+(?P<frame>\\d{1,6})$",
+      "^(?P<subject>.+?)[-_ ]+(?P<action>[^\\W\\d_][\\w-]*?)(?P<frame>\\d{1,6})$"
+    ],
+    "action_hints": [
+      "idle",
+      "attack",
+      "walk",
+      "run",
+      "wall_run",
+      "wallrun",
+      "dash",
+      "jump",
+      "fall",
+      "flip",
+      "kick",
+      "hit",
+      "hurt",
+      "death",
+      "dead",
+      "throw",
+      "slash",
+      "roll",
+      "standhit",
+      "standkick",
+      "floorkick",
+      "待机",
+      "攻击",
+      "行走",
+      "奔跑",
+      "跳跃",
+      "受击",
+      "死亡"
+    ],
+    "minimum_distinct_frames": 2,
+    "explicit_context_patterns": [
+      "(^|/)(animation|animations|anim|sequence|sequences|frames)(/|$)",
+      "(^|/)(动画|序列帧)(/|$)"
+    ],
+    "group_scope": {
+      "mode": "source_context",
+      "fields": [
+        "source_file",
+        "container_path",
+        "export_parent"
+      ],
+      "explicit_context_cross_scope": true
+    },
+    "candidate_store": {
+      "spill_threshold": 100000
+    },
+    "destination": "图片/序列帧"
+  },
+  "main_character_candidate_patterns": [
+    "(^|[_./-])(hero|player|protagonist|mainchar|main_character)([_./-]|$)",
+    "(^|[_./-])(主角|玩家角色)([_./-]|$)"
+  ],
+  "collision": {
+    "identity_hash_length": 12
+  },
+  "export_path_policy": {
+    "canonical_format": "strict_posix_relative",
+    "duplicate_semantics": "windows_case_insensitive",
+    "exact_duplicate": "deduplicate",
+    "alias_spelling": "reject"
+  },
+  "hash_cache_entries": 4096
+}

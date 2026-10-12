@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "discovery": {
+    "manifest_globs": [
+      "PackageManifest_*.json",
+      "**/PackageManifest_*.json"
+    ]
+  },
+  "runtime": {
+    "package_directory_candidates": [
+      "{ManifestRelativeParent}",
+      "{PackageName}"
+    ],
+    "scan_recursive": true,
+    "payload_extensions": [
+      ".bundle",
+      ".rawfile"
+    ],
+    "metadata_patterns": [
+      "PackageManifest_*.json",
+      "PackageManifest_*.bytes",
+      "PackageManifest_*.hash",
+      "PackageManifest_*.version",
+      "link.xml"
+    ]
+  },
+  "output_name_styles": {
+    "0": {
+      "name": "HashName",
+      "file_name_templates": [
+        "{FileHash}{BundleExtension}"
+      ]
+    }
+  },
+  "fallback_file_name_templates": [
+    "{FileHash}{BundleExtension}",
+    "{BundleName}"
+  ],
+  "hash_algorithms_by_hex_length": {
+    "32": "md5",
+    "40": "sha1",
+    "64": "sha256"
+  },
+  "file_crc32_encoding": "little_endian_bytes",
+  "outputs": {
+    "asset_csv": "yooasset-assets.csv",
+    "bundle_csv": "yooasset-bundles.csv",
+    "summary_json": "yooasset-summary.json",
+    "summary_markdown": "yooasset-summary.md"
+  },
+  "limits": {
+    "max_issue_examples": 200
+  },
+  "validation": {
+    "fail_on_mismatch": true
+  }
+}

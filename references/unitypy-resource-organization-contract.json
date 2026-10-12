@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "contract_id": "unitypy-resource-organization",
+  "config_schema_version": 2,
+  "required_index_columns": [
+    "asset_id",
+    "source_file",
+    "path_id",
+    "asset_type",
+    "asset_name",
+    "container_path",
+    "export_kind",
+    "export_path",
+    "width",
+    "height",
+    "status",
+    "remarks"
+  ],
+  "outputs": {
+    "resource_index": {
+      "filename": "资源组织索引.csv",
+      "fields": [
+        "original_asset_name",
+        "asset_type",
+        "category",
+        "group",
+        "sequence_action",
+        "sequence_frame",
+        "source_export_path",
+        "source_file",
+        "source_size",
+        "source_sha256",
+        "width",
+        "height",
+        "output_relative_path",
+        "operation_status",
+        "transfer_method",
+        "collision_status",
+        "identity_sha256"
+      ]
+    },
+    "sequence_index": {
+      "filename": "动画序列帧索引.csv",
+      "fields": [
+        "sequence_group",
+        "sequence_scope",
+        "action",
+        "source_frame_number",
+        "normalized_frame_number",
+        "original_asset_name",
+        "output_relative_path",
+        "source_export_path",
+        "source_sha256",
+        "width",
+        "height"
+      ]
+    },
+    "main_candidate_index": {
+      "filename": "主角资源候选索引.csv",
+      "fields": [
+        "original_asset_name",
+        "asset_type",
+        "category",
+        "group",
+        "source_output_relative_path",
+        "main_output_relative_path",
+        "source_sha256",
+        "operation_status",
+        "transfer_method",
+        "collision_status"
+      ]
+    },
+    "errors": {
+      "filename": "资源组织错误.jsonl"
+    },
+    "summary": {
+      "filename": "资源组织摘要.json",
+      "required_keys": [
+        "schema_version",
+        "ok",
+        "transaction_state",
+        "cleanup_state",
+        "cleanup_warnings",
+        "project_name",
+        "source_index",
+        "source_index_sha256",
+        "source_index_unchanged",
+        "source_index_passes",
+        "config_path",
+        "config_sha256",
+        "contract_path",
+        "contract_sha256",
+        "classified_resource_root",
+        "index_root",
+        "source_row_count",
+        "export_path_count",
+        "organized_count",
+        "sequence_frame_count",
+        "main_character_candidate_count",
+        "model_related_object_count",
+        "created_count",
+        "reused_count",
+        "hardlinked_count",
+        "copied_count",
+        "conflict_count",
+        "resolved_conflict_count",
+        "failed_count",
+        "filtered_category_count",
+        "skipped_count",
+        "category_counts",
+        "category_filter",
+        "output_validation"
+      ]
+    }
+  },
+  "classified_forbidden_extensions": [
+    ".json",
+    ".csv",
+    ".txt",
+    ".md"
+  ],
+  "deterministic_serialization": {
+    "json_sort_keys": true,
+    "json_allow_nan": false,
+    "json_indent": 2,
+    "json_trailing_newline": true,
+    "csv_encoding": "utf-8-sig",
+    "csv_lineterminator": "\\n"
+  },
+  "collision_policy": {
+    "same_content": "reuse_without_touching_mtime",
+    "different_content": "stable_identity_suffix_then_fail_closed",
+    "incremental_suffixes_forbidden": true
+  },
+  "source_policy": {
+    "index_processing": "two_pass_streaming",
+    "sequence_candidate_memory": "bounded_with_configured_sqlite_spill",
+    "source_files": "read_only",
+    "reject_path_traversal": true,
+    "reject_symlink_or_reparse_escape": true,
+    "classified_resource_mutations": "stable_directory_generation_handle_or_fd",
+    "sequence_candidate_eligibility": "per_export_path_deliverable_existing_and_filter_allowed",
+    "multi_export_path_semantics": "per_physical_path_context",
+    "source_resource_reads": "stable_root_to_file_handle_or_fd_same_object_hash_and_transfer",
+    "classified_target_ownership": "created_generation_bound_retire_then_handle_or_fd_delete_without_foreign_cleanup",
+    "export_path_canonicalization": "strict_posix_relative_with_windows_alias_control",
+    "duplicate_physical_sources": "deduplicate_exact_reject_windows_alias"
+  },
+  "artifact_policy": {
+    "path_semantics": "windows_case_insensitive",
+    "reject_file_parent_conflicts": true,
+    "reject_input_aliases": [
+      "index",
+      "config",
+      "contract"
+    ],
+    "requirements_must_be_unique": true,
+    "csv_fields": "unique_non_empty_strings",
+    "filename_suffix_must_match_artifact_type": true
+  },
+  "control_input_policy": {
+    "parse_and_provenance": "same_bytes_snapshot",
+    "revalidate_before_first_write": true,
+    "revalidate_before_artifact_commit": true,
+    "revalidate_during_and_after_artifact_commit": true,
+    "artifact_group_commit": "rollback_on_failure_with_summary_last",
+    "drift_result": "nonzero_without_replacing_existing_artifacts",
+    "source_index_pass_integrity": "each_pass_stream_digest_and_stable_identity",
+    "artifact_destination_binding": "planned_and_staged_exact_generation_with_stable_parent_lease",
+    "artifact_directory_lease": "held_from_stage_through_commit_rollback_and_cleanup",
+    "artifact_rename_reconciliation": "exact_generation_postcondition_after_success_or_exception",
+    "rollback_failure_state": "ok_false_rollback_incomplete_or_summary_absent",
+    "cleanup_warning_state": "committed_ok_with_machine_readable_warnings",
+    "cleanup_status_publish_failure": "ok_false_committed_cleanup_status_unknown_or_summary_absent",
+    "cleanup_status_publish": "generation_bound_retire_then_no_replace",
+    "cleanup_status_post_publish_validation": "exact_identity_and_sha256_through_caller_success_handoff",
+    "cleanup_status_success_handoff": "explicit_close_or_context_after_consumption_cli_closes_after_serialization",
+    "owned_generation_cleanup": "retire_exact_generation_then_handle_or_fd_delete",
+    "no_replace_publish_reconciliation": "hardlink_and_copy_adopt_only_exact_published_generation",
+    "abort_cleanup": "attempt_all_and_aggregate"
+  }
+}

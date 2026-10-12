@@ -120,8 +120,9 @@
 | UnityPy 可读资源索引 | `UnityPy全量可读资源/summary.json` 与 `UnityPy全量可读资源/all_resources_index.csv` |  | AssetRipper 后必须执行的可读对象补充索引 |
 | GameMaker UTMT 导出 | `GameMaker_UTMT_Exports/` |  | `data.win` 本机授权导出的 textures、sprites、sounds、strings；原始资源只留在本机学习目录 |
 | GameMaker 归一化索引 | `Normalized/gamemaker_*.csv` 与 `gamemaker_summary.json` |  | 图片、sprite 帧、动画聚合、音频索引 |
-| 图片画廊 | `全量图片画廊/index.html` |  | 当前页覆盖层预览 |
-| EXE 画廊 | `GameArtStudyGallery.exe` |  | 右键定位本地素材 |
+| 图片画廊 BAT 入口 | `2.报告/打开图片画廊.bat` |  | 调用固定 EXE，传入 `--study-root`、`--manifest` 和重复 `--images-root` |
+| 图片画廊索引 | `4.临时目录/中间索引/图片画廊/manifest.json`、`thumbnails/`、`errors.jsonl` |  | 固定 EXE 读取的 manifest、PNG 缩略图和错误日志 |
+| 固定图片预览客户端 | `built-in-tools/GameImageGallery_1.0.0/GameImageGallery.exe` |  | Skill 级固定 EXE，必须通过 `--self-test` |
 | 关键角色动画 | `关键角色动画_AssetRipper切片导出/` 与 `关键角色动画_UnityPy补充导出/` |  | 先 AssetRipper 切片，再 UnityPy 补充和对照 |
 | IL2CPP 代码映射 | `IL2CPP_Dump/` 与 `IL2CPP代码分析/` |  | 仅记录类型、字段、RVA/VA、行为摘要和阻塞项，不分发反编译代码 |
 | 场景搭建分析 | `场景搭建分析.md` |  | 场景、Prefab、SpriteRenderer、粒子、UI 结构 |
@@ -177,7 +178,7 @@
 | `1.分类资源/图片` | UI、图集、序列帧、角色/场景/道具等图片分类资源 |  | 通过/不适用/阻塞 |  |
 | `1.分类资源/模型` | 可导入 Blender 的 FBX/glTF/GLB/OBJ 与对应贴图 |  | 通过/不适用/阻塞 |  |
 | `1.分类资源/特效` | 粒子贴图、VFX 材质、VFX 模型、VFX 动画、配置 |  | 通过/不适用/阻塞 |  |
-| `2.报告` | 研究总览、技术拆解、代码地图、玩法拆解、美术报告、场景复盘、动画手感、验证日志、全量图片画廊 HTML |  | 通过/不适用/阻塞 |  |
+| `2.报告` | 研究总览、技术拆解、代码地图、玩法拆解、美术报告、场景复盘、动画手感、图片画廊 BAT 入口 `打开图片画廊.bat`；不得放 manifest、缩略图、错误日志、CSV/JSON 或验证日志 |  | 通过/不适用/阻塞 |  |
 | `3.代码` | 代码可读性判定、managed/native/script 分支输出或不可导出原因 |  | 通过/不适用/阻塞 |  |
 | `4.临时目录` | 工具验证记录、命令日志、中间索引、失败阻塞、自测结果 |  | 通过/不适用/阻塞 |  |
 | `4.临时目录/_ascii_work` | ASCII-only 暂存与回填记录，仅路径兼容需要时创建 |  | 通过/不适用/阻塞 |  |
@@ -192,7 +193,7 @@
 | 资源组织 | 分类目录、资源索引、未分类说明 |  | 通过/阻塞 |  |
 | 代码/逻辑分析 | 代码可读性判定、实现地图 |  | 通过/不适用/阻塞 |  |
 | 主角动画 | 候选索引、序列帧、动作索引 |  | 通过/不适用/阻塞 |  |
-| 画廊/EXE | HTML/EXE、manifest、自测 |  | 通过/不适用/阻塞 |  |
+| 图片画廊 BAT/固定 EXE | `2.报告/打开图片画廊.bat`、manifest/thumbnails/errors、固定 EXE `--self-test --study-root ... --manifest ... --images-root ...` |  | 通过/不适用/阻塞 |  |
 | 最终报告 | 标准产出文档 |  | 通过/阻塞 |  |
 | 使用后迭代 | Skill 更新或待办 |  | 通过/阻塞 |  |
 
@@ -542,10 +543,10 @@
 | 功能 | 结果 | 备注 |
 |---|---|---|
 | 全量本地导出 | 通过 / 需修改 | 授权路径可全量本地导出；对外交付只给索引、统计、缩略图、原创报告 |
-| 全量图片画廊 | 通过 / 需修改 | 全量列出授权图片，支持筛选和错误提示 |
-| 当前页覆盖层预览 | 通过 / 需修改 | 覆盖层可开关，不修改原图 |
-| EXE/Electron 本地壳 | 通过 / 需修改 | 离线可运行，中文路径正常 |
-| 右键打开素材目录 | 通过 / 需修改 | 只打开本机目录，不执行外部命令 |
+| 全量图片画廊 | 通过 / 需修改 | 通过 `2.报告/打开图片画廊.bat` 打开固定 EXE，读取 `4.临时目录/中间索引/图片画廊/manifest.json` 与 PNG 缩略图 |
+| 当前页覆盖层预览 | 通过 / 需修改 | 点击卡片打开预览覆盖层，鼠标滚轮缩放图片，按住鼠标左键拖拽平移图片；预览仅通过右上角 X/关闭按钮或 Esc 关闭，不修改原图 |
+| 固定 EXE/Electron 本地壳 | 通过 / 需修改 | `built-in-tools/GameImageGallery_1.0.0/GameImageGallery.exe` 离线可运行，`--self-test --study-root ... --manifest ... --images-root ...` 通过，中文路径正常 |
+| `打开目录` 按钮与右键边界 | 通过 / 需修改 | `打开目录` 按钮在系统文件管理器中打开并定位当前图片；右键不触发操作，不属于默认工作流，不执行外部命令 |
 
 ## 边界
 

@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "discovery_roots": [
+    {
+      "id": "unity_res",
+      "glob": "*_Data/Res"
+    },
+    {
+      "id": "unity_streaming_assets",
+      "glob": "*_Data/StreamingAssets"
+    }
+  ],
+  "include_extensions": [
+    {"extension": ".json", "kind": "json", "validator": "json"},
+    {"extension": ".png", "kind": "image", "validator": "pillow", "formats": ["PNG"]},
+    {"extension": ".jpg", "kind": "image", "validator": "pillow", "formats": ["JPEG"]},
+    {"extension": ".jpeg", "kind": "image", "validator": "pillow", "formats": ["JPEG"]},
+    {"extension": ".bmp", "kind": "image", "validator": "pillow", "formats": ["BMP"]},
+    {"extension": ".gif", "kind": "image", "validator": "pillow", "formats": ["GIF"]},
+    {"extension": ".webp", "kind": "image", "validator": "pillow", "formats": ["WEBP"]},
+    {"extension": ".tga", "kind": "image", "validator": "pillow", "formats": ["TGA"]},
+    {"extension": ".txt", "kind": "text", "validator": "none"},
+    {"extension": ".csv", "kind": "text", "validator": "none"},
+    {"extension": ".xml", "kind": "text", "validator": "none"},
+    {"extension": ".yaml", "kind": "text", "validator": "none"},
+    {"extension": ".yml", "kind": "text", "validator": "none"},
+    {"extension": ".ini", "kind": "text", "validator": "none"},
+    {"extension": ".cfg", "kind": "text", "validator": "none"},
+    {"extension": ".config", "kind": "text", "validator": "none"},
+    {"extension": ".md", "kind": "text", "validator": "none"},
+    {"extension": ".srt", "kind": "text", "validator": "none"},
+    {"extension": ".vtt", "kind": "text", "validator": "none"},
+    {"extension": ".lua", "kind": "text", "validator": "none"},
+    {"extension": ".mp4", "kind": "video", "validator": "none"},
+    {"extension": ".webm", "kind": "video", "validator": "none"},
+    {"extension": ".mov", "kind": "video", "validator": "none"},
+    {"extension": ".wav", "kind": "audio", "validator": "none"},
+    {"extension": ".ogg", "kind": "audio", "validator": "none"},
+    {"extension": ".mp3", "kind": "audio", "validator": "none"},
+    {"extension": ".bin", "kind": "binary", "validator": "none"},
+    {"extension": ".bytes", "kind": "binary", "validator": "none"},
+    {"extension": ".dat", "kind": "binary", "validator": "none"}
+  ],
+  "exclude_rules": [
+    {
+      "id": "version_control_or_cache",
+      "patterns": [
+        "(^|/)(\\.git|\\.svn|__pycache__)(/|$)"
+      ]
+    },
+    {
+      "id": "platform_metadata",
+      "patterns": [
+        "(^|/)(Thumbs\\.db|desktop\\.ini|\\.DS_Store)$"
+      ]
+    },
+    {
+      "id": "temporary_or_backup",
+      "patterns": [
+        "(^|/)(~\\$|\\.~lock\\.)",
+        "\\.(tmp|temp|bak)$"
+      ]
+    }
+  ],
+  "image_classification_rules": [
+    {
+      "id": "scene",
+      "classification": "场景",
+      "patterns": [
+        "(^|/)(scene|scenes|background|backgrounds|scenery|map|maps|environment|landscape)(/|$)",
+        "(^|[_./-])(scene|background|bg|scenery|map|environment|landscape)([_./-]|$)",
+        "(^|/)(场景|背景|地图|环境)(/|$)"
+      ]
+    },
+    {
+      "id": "character_portrait",
+      "classification": "角色立绘",
+      "patterns": [
+        "(^|/)(avatar|avater|avatars|avaters|portrait|portraits|character|characters|role|roles)(/|$)",
+        "(^|[_./-])(avatar|avater|portrait|character|role|head|face)([_./-]|$)",
+        "(^|/)(角色|立绘|头像|人物)(/|$)"
+      ]
+    },
+    {
+      "id": "ui",
+      "classification": "UI",
+      "patterns": [
+        "(^|/)(ui|gui|hud|menu|menus|button|buttons|icon|icons|panel|panels)(/|$)",
+        "(^|[_./-])(ui|gui|hud|menu|button|icon|cursor|panel|dialog|logo)([_./-]|$)",
+        "(^|/)(界面|按钮|图标|面板)(/|$)"
+      ]
+    },
+    {
+      "id": "item",
+      "classification": "道具",
+      "patterns": [
+        "(^|/)(item|items|prop|props|weapon|weapons|equipment|pickup|pickups)(/|$)",
+        "(^|[_./-])(item|prop|weapon|equipment|pickup|collectible)([_./-]|$)",
+        "(^|/)(道具|物品|武器|装备)(/|$)"
+      ]
+    }
+  ],
+  "default_image_classification": "未分类_待复核"
+}

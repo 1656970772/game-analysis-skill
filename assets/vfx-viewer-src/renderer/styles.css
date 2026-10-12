@@ -1,0 +1,172 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  color: #ecf1f8;
+  background: #121417;
+  font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  width: 100vw;
+  height: 100vh;
+}
+
+.sidebar {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+  border-right: 1px solid #2c333d;
+  background: #181c22;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 104px 104px 104px;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid #2c333d;
+}
+
+input,
+select,
+button {
+  height: 34px;
+  color: #ecf1f8;
+  border: 1px solid #39424e;
+  border-radius: 6px;
+  background: #202630;
+  font: inherit;
+}
+
+input {
+  min-width: 0;
+  padding: 0 10px;
+}
+
+select,
+button {
+  padding: 0 10px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.summary {
+  padding: 10px 12px;
+  color: #aeb8c6;
+  border-bottom: 1px solid #2c333d;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.list {
+  min-height: 0;
+  overflow: auto;
+}
+
+.item {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 10px 12px;
+  color: inherit;
+  border: 0;
+  border-bottom: 1px solid #252b34;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.item:hover,
+.item.active {
+  background: #242c36;
+}
+
+.itemName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.itemMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: #9aa7b7;
+  font-size: 12px;
+}
+
+.preview {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  grid-template-rows: auto minmax(280px, 1fr) 190px;
+}
+
+.previewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #2c333d;
+}
+
+h1 {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 20px;
+  font-weight: 650;
+}
+
+p {
+  margin: 4px 0 0;
+  color: #9aa7b7;
+  font-size: 13px;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(transparent 31px, rgba(255,255,255,.035) 32px),
+    linear-gradient(90deg, transparent 31px, rgba(255,255,255,.035) 32px),
+    radial-gradient(circle at 50% 46%, #202632 0, #121417 64%);
+  background-size: 32px 32px, 32px 32px, 100% 100%;
+}
+
+.details {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 0;
+  border-top: 1px solid #2c333d;
+  background: #15191f;
+}
+
+#statusLine {
+  padding: 10px 14px;
+  color: #b9c4d2;
+  border-bottom: 1px solid #2c333d;
+  font-size: 13px;
+}
+
+pre {
+  margin: 0;
+  overflow: auto;
+  padding: 12px 14px;
+  color: #cbd5e1;
+  font-family: Consolas, "Cascadia Mono", monospace;
+  font-size: 12px;
+  line-height: 1.45;
+}

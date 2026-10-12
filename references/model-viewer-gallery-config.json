@@ -1,0 +1,158 @@
+{
+  "tool": {
+    "name": "GameModelViewer",
+    "version": "1.0.0",
+    "directory": "built-in-tools/GameModelViewer_1.0.0",
+    "exe_name": "GameModelViewer.exe"
+  },
+  "launcher": {
+    "bat_name": "打开模型预览.bat",
+    "alias_bat_names": [],
+    "deprecated_alias_bat_names": [
+      "模型预览.bat"
+    ],
+    "environment_exe": "GAME_ANALYSIS_MODEL_VIEWER",
+    "environment_skill_root": "GAME_ANALYSIS_SKILL_ROOT"
+  },
+  "formats": {
+    "source_priority": [
+      "glb",
+      "gltf",
+      "fbx"
+    ],
+    "direct_preview": [
+      "glb",
+      "gltf"
+    ],
+    "blender_preview": [
+      "fbx"
+    ]
+  },
+  "manifest": {
+    "schema_version": 1,
+    "texture_status": [
+      "bound",
+      "missing",
+      "same_name_candidate",
+      "none",
+      "unknown"
+    ],
+    "material_status": [
+      "verified",
+      "missing_external_resources",
+      "unknown"
+    ],
+    "material_status_labels": {
+      "verified": "材质已验证",
+      "missing_external_resources": "缺失外挂资源",
+      "unknown": "材质未知"
+    },
+    "preview_status": [
+      "ready",
+      "converted",
+      "failed",
+      "unsupported"
+    ],
+    "tag_rules": {
+      "include_source_format": true,
+      "texture_prefix": "texture:",
+      "preview_prefix": "preview:",
+      "material_prefix": "material:",
+      "animation_prefix": "animation:",
+      "animation_origin_prefix": "animation-origin:"
+    }
+  },
+  "paths": {
+    "models_dir": "1.分类资源/模型",
+    "report_dir": "2.报告",
+    "overview_name": "00_研究总览.md",
+    "preview_index_dir": "4.临时目录/中间索引/模型预览",
+    "unitypy_model_index": "4.临时目录/中间索引/UnityPy模型导出/模型导出索引.csv",
+    "manifest_name": "manifest.json",
+    "thumbs_dir": "thumbs",
+    "preview_cache_dir": "preview-cache",
+    "errors_name": "errors.jsonl"
+  },
+  "thumbnail": {
+    "width": 320,
+    "height": 240,
+    "background": "#20242a",
+    "camera_yaw_degrees": 35,
+    "camera_pitch_degrees": 22,
+    "padding": 1.25,
+    "light_type": "AREA",
+    "light_energy": 450,
+    "light_size": 5
+  },
+  "animation_preview": {
+    "model_name": "Unity动作预览_AnimationClips",
+    "max_clips": 48,
+    "index_candidates": [
+      "0.原始导出/UnityPy/UnityPy全量可读资源/all_resources_index.csv"
+    ],
+    "index_search_globs": [
+      "0.原始导出/UnityPy*/UnityPy全量可读资源/all_resources_index.csv"
+    ],
+    "clip_name_patterns": [
+      "idle",
+      "walk",
+      "run",
+      "attack",
+      "pugong",
+      "jineng",
+      "skill",
+      "dead"
+    ],
+    "fallback_duration_seconds": 1.0,
+    "min_duration_seconds": 0.5,
+    "max_duration_seconds": 6.0
+  },
+  "full_body_preview": {
+    "enabled": true,
+    "name_pattern": "^(?P<character>.+?)_(?P<variant>\\d+)_(?P<role>.+)$",
+    "name_template": "{outfit_prefix} 全身预览",
+    "anchor_roles": [
+      "clothes"
+    ],
+    "base_parts": [
+      {
+        "role": "body",
+        "name_template": "{character}_body"
+      },
+      {
+        "role": "head",
+        "name_template": "{character}_head"
+      }
+    ],
+    "outfit_roles": [
+      "clothes",
+      "trousers",
+      "Larms",
+      "Rarms",
+      "Llegs",
+      "Rlegs",
+      "Lfoot1",
+      "Rfoot1",
+      "Lfoot2",
+      "Rfoot2"
+    ],
+    "tag": "full-body-preview:available"
+  },
+  "ui": {
+    "filters": [
+      "source_format",
+      "texture_status",
+      "preview_status",
+      "tags"
+    ],
+    "tag_filter_label": "全部标签",
+    "keyboard": {
+      "previous": "ArrowLeft",
+      "next": "ArrowRight"
+    }
+  },
+  "limits": {
+    "max_model_file_mb": 2048,
+    "max_batch_count": 20000
+  }
+}

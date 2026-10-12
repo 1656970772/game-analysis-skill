@@ -1,4 +1,4 @@
-﻿# Cocos Creator ASTC 工作流
+# Cocos Creator ASTC 工作流
 
 用于授权的 Cocos Creator APK、解包目录或移动端包体，尤其是存在 `assets/assets/<bundle>/cc.config.json`、`native/`、`import/`、`.astc`、`.atlas`，且画廊里角色/场景只显示图标或零碎 PNG 的情况。
 
@@ -97,7 +97,7 @@ tools/astcenc_5.4.0_windows_x64/bin/astcenc-sse4.1.exe
 python "<GameAnalysis>/scripts/cocos_creator_astc_repair.py" --source-root "<授权APK解包目录>" --study-root "<study-root>"
 ```
 
-如果旧画廊只收集 PNG/JPG/WEBP，必须新增角色/场景专项画廊，不能用“未分类 ASTC 存在”替代用户可查看的角色/场景资源。
+图片画廊必须使用固定 EXE 默认入口：生成 `4.临时目录/中间索引/图片画廊/manifest.json`、PNG 缩略图和 `errors.jsonl`，再生成 `2.报告/打开图片画廊.bat`。BAT 调用 `built-in-tools/GameImageGallery_1.0.0/GameImageGallery.exe`，传入 `--study-root`、`--manifest` 和 manifest `source_roots` 派生的重复 `--images-root`。如果旧兼容画廊只收集 PNG/JPG/WEBP，必须让新 manifest 覆盖角色/场景专项图片，不能用“未分类 ASTC 存在”替代用户可查看的角色/场景资源。
 
 ## 性能和路径注意事项
 
@@ -108,12 +108,12 @@ python "<GameAnalysis>/scripts/cocos_creator_astc_repair.py" --source-root "<授
 
 ## 画廊验收
 
-HTML 画廊必须可本地打开。推荐验收：
+固定图片画廊必须可通过 BAT 和 EXE 自测验收：
 
 - manifest item 数等于实际可预览 PNG 数。
-- 浏览器中 `figure` 数和 `img` 数等于 manifest item 数。
-- 控制台 error 为 0。
-- 桌面和移动视口都检查；图片过多导致 full-page screenshot 超时时，保存 visible screenshot 并在验证日志说明。
+- `2.报告/打开图片画廊.bat` 存在，并包含 `--study-root`、`--manifest` 和重复 `--images-root`。
+- `built-in-tools/GameImageGallery_1.0.0/GameImageGallery.exe --self-test --study-root ... --manifest ... --images-root ...` 通过。
+- `4.临时目录/中间索引/图片画廊/manifest.json`、`thumbnails/` 和 `errors.jsonl` 位于临时目录；不要把 manifest、缩略图或日志放进 `2.报告/`。
 - 最终回复说明角色/场景数量、主角候选数量、失败数量和入口路径。
 
 ## 常见失败
@@ -123,4 +123,4 @@ HTML 画廊必须可本地打开。推荐验收：
 - 把 `cc.Texture2D` `/texture` 当主预览项：导致重复或全部指向错误纹理。
 - 下载 Windows ARM64 版 `astcenc` 到 x64 机器：工具不可运行或命令失败。
 - 给 `astcenc -dl` 传 block size/quality：新版工具会报参数不识别。
-- 画廊用 fetch 读取本地 JSON：直接双击打开时可能被浏览器拦截；重要交付优先内联 manifest 或通过本地 server 验证。
+- 只生成旧 HTML 画廊或每项目 EXE：默认流程必须生成 manifest + `打开图片画廊.bat`，并使用 Skill 固定 EXE self-test 验收。

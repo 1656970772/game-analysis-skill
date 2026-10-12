@@ -1,0 +1,612 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codex.local/game-analysis/vfx-unity-reconstruction-schema.json",
+  "title": "Unity VFX Reconstruction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "engine",
+    "id",
+    "name",
+    "kind",
+    "source_object",
+    "root_type",
+    "modules",
+    "resources",
+    "preview_status",
+    "reconstruction_status",
+    "unity_export_status"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "engine": {
+      "type": "string",
+      "enum": ["unity"]
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "particle_system",
+        "trail_renderer",
+        "line_renderer",
+        "resource_only",
+        "unsupported"
+      ]
+    },
+    "source_object": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_file", "path_id", "asset_type"],
+      "properties": {
+        "source_file": {
+          "type": "string"
+        },
+        "path_id": {
+          "type": "string"
+        },
+        "asset_type": {
+          "type": "string"
+        },
+        "asset_name": {
+          "type": "string"
+        },
+        "export_path": {
+          "type": "string"
+        },
+        "container_path": {
+          "type": "string"
+        }
+      }
+    },
+    "root_type": {
+      "type": "string",
+      "enum": [
+        "ParticleSystem",
+        "TrailRenderer",
+        "LineRenderer",
+        "ResourceOnly",
+        "Unsupported"
+      ]
+    },
+    "modules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "main",
+        "emission",
+        "shape",
+        "renderer",
+        "raw_unity"
+      ],
+      "properties": {
+        "main": {
+          "type": "object",
+          "allOf": [{"$ref": "#/$defs/main_module"}]
+        },
+        "emission": {
+          "type": "object",
+          "allOf": [{"$ref": "#/$defs/emission_module"}]
+        },
+        "shape": {
+          "type": "object",
+          "allOf": [{"$ref": "#/$defs/shape_module"}]
+        },
+        "velocityOverLifetime": {
+          "type": "object",
+          "allOf": [{"$ref": "#/$defs/velocity_over_lifetime_module"}]
+        },
+        "colorOverLifetime": {
+          "type": "object",
+          "allOf": [{"$ref": "#/$defs/color_over_lifetime_module"}]
+        },
+        "sizeOverLifetime": {
+          "type": "object",
+          "allOf": [{"$ref": "#/$defs/size_over_lifetime_module"}]
+        },
+        "textureSheetAnimation": {
+          "type": "object",
+          "allOf": [{"$ref": "#/$defs/texture_sheet_animation_module"}]
+        },
+        "renderer": {
+          "type": "object",
+          "allOf": [{"$ref": "#/$defs/renderer_module"}]
+        },
+        "trail": {
+          "type": "object",
+          "allOf": [{"$ref": "#/$defs/trail_module"}]
+        },
+        "line": {
+          "type": "object",
+          "allOf": [{"$ref": "#/$defs/line_module"}]
+        },
+        "raw_unity": {
+          "type": "object",
+          "description": "Original Unity module payloads retained for fields not normalized yet.",
+          "additionalProperties": true
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "textures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resource_ref"
+          },
+          "default": []
+        },
+        "materials": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resource_ref"
+          },
+          "default": []
+        },
+        "meshes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resource_ref"
+          },
+          "default": []
+        },
+        "animations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resource_ref"
+          },
+          "default": []
+        }
+      }
+    },
+    "preview_status": {
+      "type": "string",
+      "enum": ["pending", "ready", "partial", "resource_only", "failed", "unsupported"]
+    },
+    "reconstruction_status": {
+      "type": "string",
+      "enum": ["pending", "full", "partial", "resource_only", "failed"]
+    },
+    "unity_export_status": {
+      "type": "string",
+      "enum": ["pending", "ready", "partial", "skipped", "failed"]
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    }
+  },
+  "$defs": {
+    "min_max_curve": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "constant": {
+          "type": "number"
+        },
+        "constantMin": {
+          "type": "number"
+        },
+        "constantMax": {
+          "type": "number"
+        },
+        "curve": {
+          "type": "array"
+        },
+        "curveMin": {
+          "type": "array"
+        },
+        "curveMax": {
+          "type": "array"
+        }
+      }
+    },
+    "min_max_gradient": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "colorMin": {
+          "type": "string"
+        },
+        "colorMax": {
+          "type": "string"
+        },
+        "gradient": {
+          "type": "array"
+        },
+        "gradientMin": {
+          "type": "array"
+        },
+        "gradientMax": {
+          "type": "array"
+        }
+      }
+    },
+    "vector3": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "z": {
+          "type": "number"
+        }
+      }
+    },
+    "main_module": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "duration": {
+          "type": "number"
+        },
+        "loop": {
+          "type": "boolean"
+        },
+        "prewarm": {
+          "type": "boolean"
+        },
+        "startDelay": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "startLifetime": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "startSpeed": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "startSize": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "startRotation": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "startColor": {
+          "$ref": "#/$defs/min_max_gradient"
+        },
+        "gravityModifier": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "simulationSpace": {
+          "type": "string"
+        },
+        "scalingMode": {
+          "type": "string"
+        },
+        "playOnAwake": {
+          "type": "boolean"
+        },
+        "maxParticles": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "emission_module": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "rateOverTime": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "rateOverDistance": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "bursts": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "shape_module": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "shapeType": {
+          "type": "string"
+        },
+        "angle": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "number"
+        },
+        "radiusThickness": {
+          "type": "number"
+        },
+        "arc": {
+          "type": "number"
+        },
+        "boxThickness": {
+          "$ref": "#/$defs/vector3"
+        },
+        "scale": {
+          "$ref": "#/$defs/vector3"
+        },
+        "position": {
+          "$ref": "#/$defs/vector3"
+        },
+        "rotation": {
+          "$ref": "#/$defs/vector3"
+        }
+      }
+    },
+    "velocity_over_lifetime_module": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "space": {
+          "type": "string"
+        },
+        "x": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "y": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "z": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "orbitalX": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "orbitalY": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "orbitalZ": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "speedModifier": {
+          "$ref": "#/$defs/min_max_curve"
+        }
+      }
+    },
+    "color_over_lifetime_module": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "color": {
+          "$ref": "#/$defs/min_max_gradient"
+        },
+        "gradient": {
+          "$ref": "#/$defs/min_max_gradient"
+        }
+      }
+    },
+    "size_over_lifetime_module": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "separateAxes": {
+          "type": "boolean"
+        },
+        "size": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "x": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "y": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "z": {
+          "$ref": "#/$defs/min_max_curve"
+        }
+      }
+    },
+    "texture_sheet_animation_module": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "mode": {
+          "type": "string"
+        },
+        "numTilesX": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "numTilesY": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "animation": {
+          "type": "string"
+        },
+        "frameOverTime": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "startFrame": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "cycles": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "uvChannelMask": {
+          "type": "integer"
+        }
+      }
+    },
+    "renderer_module": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "renderMode": {
+          "type": "string"
+        },
+        "material": {
+          "$ref": "#/$defs/resource_ref"
+        },
+        "trailMaterial": {
+          "$ref": "#/$defs/resource_ref"
+        },
+        "mesh": {
+          "$ref": "#/$defs/resource_ref"
+        },
+        "sortingLayer": {
+          "type": "string"
+        },
+        "sortingOrder": {
+          "type": "integer"
+        },
+        "alignment": {
+          "type": "string"
+        },
+        "flip": {
+          "$ref": "#/$defs/vector3"
+        },
+        "normalDirection": {
+          "type": "number"
+        },
+        "shadowCastingMode": {
+          "type": "string"
+        },
+        "receiveShadows": {
+          "type": "boolean"
+        }
+      }
+    },
+    "trail_module": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "time": {
+          "type": "number"
+        },
+        "minVertexDistance": {
+          "type": "number"
+        },
+        "widthMultiplier": {
+          "type": "number"
+        },
+        "widthCurve": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "colorGradient": {
+          "$ref": "#/$defs/min_max_gradient"
+        },
+        "material": {
+          "$ref": "#/$defs/resource_ref"
+        },
+        "textureMode": {
+          "type": "string"
+        },
+        "alignment": {
+          "type": "string"
+        }
+      }
+    },
+    "line_module": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "useWorldSpace": {
+          "type": "boolean"
+        },
+        "loop": {
+          "type": "boolean"
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/vector3"
+          }
+        },
+        "widthMultiplier": {
+          "type": "number"
+        },
+        "widthCurve": {
+          "$ref": "#/$defs/min_max_curve"
+        },
+        "colorGradient": {
+          "$ref": "#/$defs/min_max_gradient"
+        },
+        "material": {
+          "$ref": "#/$defs/resource_ref"
+        },
+        "textureMode": {
+          "type": "string"
+        },
+        "alignment": {
+          "type": "string"
+        }
+      }
+    },
+    "resource_ref": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "type", "name"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "source_path": {
+          "type": "string"
+        },
+        "export_path": {
+          "type": "string"
+        },
+        "unity_asset_path": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

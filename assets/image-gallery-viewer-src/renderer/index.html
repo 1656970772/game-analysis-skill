@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' ga-image:; style-src 'self'; script-src 'self'; connect-src 'none'; object-src 'none'; frame-src 'none'; media-src 'none';">
+  <title>GameAnalysis 图片画廊</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1 id="title">图片画廊</h1>
+      <div class="meta">
+        <span>索引 <strong id="total">0</strong></span>
+        <span>结果 <strong id="filtered">0</strong></span>
+      </div>
+    </div>
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="搜索文件名、路径、分类">
+      <select id="category"></select>
+      <select id="sort">
+        <option value="path_asc">路径 A-Z</option>
+        <option value="area_desc">面积从大到小</option>
+        <option value="area_asc">面积从小到大</option>
+        <option value="size_desc">体积从大到小</option>
+      </select>
+      <select id="pageSize"></select>
+    </div>
+  </header>
+  <main>
+    <div id="grid" class="grid"></div>
+    <div id="empty" class="empty" hidden>没有匹配的图片。</div>
+    <div class="pager">
+      <button id="prev" type="button">上一页</button>
+      <span id="pageInfo"></span>
+      <button id="next" type="button">下一页</button>
+    </div>
+  </main>
+  <div id="previewOverlay" class="preview-overlay" hidden>
+    <div class="preview-bar">
+      <div class="preview-copy">
+        <div id="previewTitle" class="preview-title"></div>
+        <div id="previewMeta" class="preview-meta"></div>
+      </div>
+      <button id="openFolder" type="button">打开目录</button>
+      <button id="copyPath" type="button">复制路径</button>
+      <button id="closePreview" class="preview-close" type="button" aria-label="关闭预览" title="关闭预览"></button>
+    </div>
+    <div id="previewStage" class="preview-stage">
+      <img id="previewImage" class="preview-image" draggable="false" alt="">
+    </div>
+  </div>
+  <script src="./renderer.js"></script>
+</body>
+</html>

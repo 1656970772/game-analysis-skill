@@ -1,0 +1,36 @@
+{
+  "name": "game-vfx-viewer",
+  "version": "1.0.0",
+  "description": "Local-only Unity VFX preview viewer for GameAnalysis study roots.",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "self-test": "electron . --self-test",
+    "dist": "electron-builder --win portable --x64"
+  },
+  "devDependencies": {
+    "electron": "^39.2.6",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "local.gameanalysis.vfxviewer",
+    "productName": "GameVfxViewer",
+    "artifactName": "GameVfxViewer.${ext}",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "package.json",
+      "renderer/**/*"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ]
+    }
+  }
+}

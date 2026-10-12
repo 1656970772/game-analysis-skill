@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' ga-animation:; style-src 'self'; script-src 'self'; connect-src 'none'; object-src 'none'; frame-src 'none'; media-src 'none'; base-uri 'none'; form-action 'none';">
+  <title>GameAnimationViewer</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="eyebrow">GAMEANALYSIS · LOCAL</span>
+      <h1>动画素材工作台</h1>
+    </div>
+    <div class="filters" aria-label="动画筛选">
+      <input id="search" type="search" placeholder="搜索 Bank、动作、包、分类">
+      <select id="category" aria-label="分类"></select>
+      <select id="statusFilter" aria-label="预览状态"></select>
+      <span id="resultCount" class="count">0 项</span>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="library panel">
+      <div class="panel-heading">
+        <div>
+          <span class="section-kicker">BANK INDEX</span>
+          <h2>动画库</h2>
+        </div>
+        <span id="totalCount" class="subtle">0</span>
+      </div>
+      <div id="itemList" class="item-list" role="listbox" aria-label="Bank 列表"></div>
+      <div id="emptyList" class="empty" hidden>没有匹配的动画。</div>
+    </aside>
+
+    <section class="player-column">
+      <section class="player panel">
+        <div class="player-header">
+          <div>
+            <span id="selectedCategory" class="section-kicker">未选择</span>
+            <h2 id="selectedBank">选择一个 Bank</h2>
+            <p id="selectedPackage" class="subtle">—</p>
+          </div>
+          <span id="previewStatus" class="status-pill">blocked</span>
+        </div>
+
+        <div class="selectors">
+          <label>Build<select id="buildSelect" disabled></select></label>
+          <label>动作<select id="clipSelect" disabled></select></label>
+        </div>
+
+        <div id="stage" class="stage" aria-label="透明动画预览画布">
+          <img id="frameImage" draggable="false" alt="动画当前帧">
+          <div id="stageMessage" class="stage-message">选择可预览的 Bank</div>
+        </div>
+
+        <div class="transport">
+          <button id="playPause" type="button" disabled>播放</button>
+          <button id="previousFrame" type="button" disabled>上一帧</button>
+          <button id="nextFrame" type="button" disabled>下一帧</button>
+          <label class="loop-control"><input id="loop" type="checkbox" checked> 循环</label>
+          <label class="speed-control">速度
+            <select id="speed">
+              <option value="0.25">0.25×</option>
+              <option value="0.5">0.5×</option>
+              <option value="1" selected>1×</option>
+              <option value="1.5">1.5×</option>
+              <option value="2">2×</option>
+              <option value="4">4×</option>
+            </select>
+          </label>
+          <span id="frameReadout" class="frame-readout">0 / 0</span>
+        </div>
+        <input id="timeline" class="timeline" type="range" min="0" max="0" value="0" disabled aria-label="动画时间轴">
+        <div id="previewError" class="error-text" role="alert"></div>
+      </section>
+
+      <section class="export-panel panel">
+        <div>
+          <span class="section-kicker">EXPORT</span>
+          <h2>导出当前选择</h2>
+        </div>
+        <div class="export-actions">
+          <button type="button" data-export-format="current-frame-png">当前帧 PNG</button>
+          <button type="button" data-export-format="png-sequence">PNG 序列</button>
+          <button type="button" data-export-format="apng">APNG</button>
+          <button type="button" data-export-format="gif">GIF</button>
+          <button type="button" data-export-format="source-bundle">素材包</button>
+        </div>
+        <div id="exportResult" class="export-result">尚未导出。</div>
+      </section>
+    </section>
+
+    <aside class="inspector panel">
+      <section>
+        <span class="section-kicker">MATCH EVIDENCE</span>
+        <h2>匹配候选</h2>
+        <div id="candidateDetails" class="candidate-details"></div>
+      </section>
+      <section>
+        <span class="section-kicker">WARNINGS</span>
+        <h2>诊断</h2>
+        <div id="diagnostics" class="diagnostics"></div>
+      </section>
+      <section>
+        <span class="section-kicker">SOURCE MATERIAL</span>
+        <h2>素材</h2>
+        <div id="materialList" class="material-list"></div>
+      </section>
+    </aside>
+  </main>
+
+  <script src="./renderer.js"></script>
+</body>
+</html>

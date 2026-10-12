@@ -1,11 +1,11 @@
-# 工具自扩展与使用后迭代
+﻿# 工具自扩展与使用后迭代
 
 ## 适用场景
 
 遇到以下情况时读取本文件：
 
 - `detect_engine.py` 与人工检查无法命中 Unity、Unreal、GameMaker 等已写入分支。
-- 命中 Godot、RPG Maker、Ren'Py、MonoGame、HTML5、自研引擎、移动端包体或其他未写明工作流。
+- 命中 RPG Maker、Ren'Py、HTML5、自研引擎、移动端包体或其他未写明工作流；Godot 3.x PCK 已有专用流程，直接读取 `references/godot-pck-workflow.md`，不要再按未知引擎从零研究。
 - 已有工具无法读取资源包、metadata、纹理、音频、模型、脚本或场景文件。
 - 任务中出现新的错误信息、版本兼容问题、GUI 限制、路径编码问题或大文件处理问题。
 - 任务结束前需要把本次经验沉淀回 Skill。
@@ -43,7 +43,7 @@
 
 | 线索 | 初始判断 | 下一步 |
 |---|---|---|
-| `project.godot`、`.pck` | Godot | 先查 Godot 官方 pack 格式和版本；优先只读列包与小样本导出 |
+| `project.godot`、独立 `.pck`、`GDPC` | Godot 3.x PCK | 读取 `references/godot-pck-workflow.md`；按 detect→PCK probe→GDRE list→scripts-only→full recover→organize 执行 |
 | `Game.rgss*`、`Data/*.rvdata*` | RPG Maker | 识别 VX/VX Ace/MV/MZ 分支，先做数据表和图片目录索引 |
 | `.rpa`、`.rpyc`、`renpy/` | Ren'Py | 先识别 archive、脚本和图片结构，输出叙事/UI/资源索引 |
 | `.xnb` | XNA/MonoGame | 查找 XNB viewer/extractor，只做本机索引和抽象规范 |

@@ -1,0 +1,35 @@
+{
+  "name": "game-analysis-image-gallery",
+  "version": "1.0.0",
+  "description": "Local-only image gallery viewer for GameAnalysis study roots.",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "self-test": "electron . --self-test --study-root . --manifest sample-manifest.json --images-root .",
+    "dist": "electron-builder --win portable --x64"
+  },
+  "devDependencies": {
+    "electron": "^39.2.6",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "local.gameanalysis.imagegallery",
+    "productName": "GameImageGallery",
+    "artifactName": "GameImageGallery.${ext}",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json",
+      "renderer/**/*"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ]
+    }
+  }
+}

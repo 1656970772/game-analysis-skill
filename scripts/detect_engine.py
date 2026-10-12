@@ -99,6 +99,17 @@ ENGINE_MARKERS: dict[str, list[Marker]] = {
         Marker("objects/**/*.yy", 15, "GameMaker object resource"),
         Marker("data.win", 25, "GameMaker Windows data marker"),
     ],
+    "Klei / Don't Starve Together": [
+        Marker("bin64/dontstarve_steam*.exe", 35, "Don't Starve Together Windows executable"),
+        Marker("dontstarve_steam*.exe", 25, "Don't Starve executable"),
+        Marker("data/databundles/scripts.zip", 36, "Klei scripts databundle"),
+        Marker("data/databundles/*.zip", 10, "Klei databundle archive"),
+        Marker("data/anim/*.zip", 14, "Klei animation archive"),
+        Marker("data/anim/*.tex", 14, "Klei TEX/KTEX texture"),
+        Marker("data/anim/*.dyn", 12, "Klei dynamic animation payload"),
+        Marker("data/sound/*.fsb", 14, "FMOD FSB bank used by Klei games"),
+        Marker("data/sound/*.fev", 10, "FMOD FEV event bank used by Klei games"),
+    ],
     "RPG Maker MV/MZ": [
         Marker("Game.rpgproject", 42, "RPG Maker project marker"),
         Marker("www/js/rpg_core.js", 30, "RPG Maker MV runtime"),

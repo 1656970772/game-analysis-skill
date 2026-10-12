@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "adapters": {
+    "klei_dst": {
+      "xml_root": "4.临时目录/中间索引/Klei动画XML",
+      "atlas_root": "1.分类资源/图片/图集/KleiTEX/data/anim",
+      "manifest_output": "4.临时目录/中间索引/游戏动画预览/manifest.json",
+      "matching": {
+        "symbol_overlap_threshold": 0.6,
+        "ready_symbol_coverage": 1.0,
+        "minimum_shared_symbols": 1,
+        "maximum_candidates": 12,
+        "ambiguity_epsilon": 0.000001,
+        "weights": {
+          "same_package": 4.0,
+          "build_name_equals_bank": 3.0,
+          "build_package_equals_bank": 2.0,
+          "symbol_coverage": 5.0
+        },
+        "render_policies": [
+          {
+            "id": "dst_player_runtime_overrides",
+            "bank_names": ["wilson"],
+            "package_prefixes": ["player_"],
+            "require_build_name_equals_bank": true,
+            "minimum_symbol_coverage": 0.4,
+            "missing_symbol_policy": "skip"
+          }
+        ]
+      },
+      "classification": {
+        "default_category": "未分类动画",
+        "default_confidence": 0.25,
+        "rules": [
+          {
+            "category": "水面动画",
+            "confidence": 0.9,
+            "keywords": ["wave", "ocean", "water", "ripple", "splash", "wake", "shimmer"]
+          },
+          {
+            "category": "特效",
+            "confidence": 0.85,
+            "keywords": ["fx", "effect", "spark", "smoke", "fire", "portal", "shadow", "glow"]
+          },
+          {
+            "category": "人物动画",
+            "confidence": 0.8,
+            "priority": 100,
+            "scope": "identity",
+            "keywords": ["player", "wilson", "wendy", "willow", "wolfgang", "wx78", "wickerbottom", "woodie", "wes", "maxwell", "wigfrid", "webber", "winona", "wortox", "wormwood", "warly", "wurt", "walter", "wanda"]
+          },
+          {
+            "category": "建筑动画",
+            "confidence": 0.72,
+            "keywords": ["house", "wall", "gate", "station", "machine", "chest", "tower", "fence", "structure"]
+          },
+          {
+            "category": "植物动画",
+            "confidence": 0.72,
+            "keywords": ["tree", "bush", "grass", "flower", "plant", "sapling", "farm", "mushroom", "vine"]
+          },
+          {
+            "category": "怪物动画",
+            "confidence": 0.68,
+            "keywords": ["spider", "hound", "deerclops", "dragonfly", "bearger", "moose", "beequeen", "toadstool", "monster", "boss"]
+          }
+        ]
+      }
+    }
+  }
+}

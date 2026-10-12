@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GameVfxViewer</title>
+    <link rel="stylesheet" href="./renderer/styles.css">
+  </head>
+  <body>
+    <main class="app">
+      <aside class="sidebar">
+        <div class="toolbar">
+          <input id="search" type="search" placeholder="筛选特效">
+          <select id="typeFilter">
+            <option value="">全部类型</option>
+          </select>
+          <select id="tagFilter">
+            <option value="">全部标签</option>
+          </select>
+          <select id="statusFilter">
+            <option value="">全部状态</option>
+            <option value="ready">ready</option>
+            <option value="partial">partial</option>
+            <option value="failed">failed</option>
+          </select>
+        </div>
+        <div id="summary" class="summary"></div>
+        <div id="list" class="list"></div>
+      </aside>
+      <section class="preview">
+        <header class="previewHeader">
+          <div>
+            <h1 id="title">GameVfxViewer</h1>
+            <p id="subtitle"></p>
+          </div>
+          <button id="openUnityExport" type="button">打开 Unity Export</button>
+        </header>
+        <canvas id="canvas" width="1024" height="640"></canvas>
+        <section class="details">
+          <div id="statusLine"></div>
+          <pre id="metadata"></pre>
+        </section>
+      </section>
+    </main>
+    <script src="./renderer/renderer.js"></script>
+  </body>
+</html>

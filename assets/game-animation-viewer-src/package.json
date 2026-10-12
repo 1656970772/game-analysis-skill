@@ -1,0 +1,34 @@
+{
+  "name": "game-analysis-animation-viewer",
+  "version": "1.0.1",
+  "description": "Offline Klei/DST animation manifest viewer for GameAnalysis study roots.",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "self-test": "node self-test.js",
+    "dist": "electron-builder --win portable --x64"
+  },
+  "devDependencies": {
+    "electron": "^39.2.6",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "local.gameanalysis.animationviewer",
+    "productName": "GameAnimationViewer",
+    "artifactName": "GameAnimationViewer.${ext}",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "self-test.js",
+      "package.json",
+      "renderer/**/*"
+    ],
+    "win": {
+      "target": ["portable"]
+    }
+  }
+}
